@@ -22,6 +22,7 @@ public class TestDriver {
 
     public void testImportTriple(){
         KnowledgeGraph.getInstance().importTriple("Jeremy", "is_married_to", "Molly");
+        KnowledgeGraph.getInstance().importTriple("Jeremy", "is_father_of", "Mila");
         KnowledgeGraph.getInstance().importTriple("Jeremy", "is_married_to", "Molly");
     }
 
