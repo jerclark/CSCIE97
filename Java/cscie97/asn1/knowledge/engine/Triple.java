@@ -1,5 +1,15 @@
 package cscie97.asn1.knowledge.engine;
 
+
+/**
+ * Domain object to represent a fact in the knowledge. Composed of a subject, predicate and object.
+ *
+ * @see Node
+ * @see Predicate
+ *
+ * @author Jeremy Clark
+ *
+ */
 public class Triple {
 
     private final Node sub;

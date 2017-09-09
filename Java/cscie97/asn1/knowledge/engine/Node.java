@@ -1,5 +1,14 @@
 package cscie97.asn1.knowledge.engine;
 
+
+/**
+ * Domain object used to represent subjects and objects in a Triple
+ *
+ * @see Triple
+ *
+ * @author Jeremy Clark
+ *
+ */
 public class Node {
 
     private final String identifier;
