@@ -1,7 +1,4 @@
 package cscie97.asn2.housemate.model;
-
-import com.sun.deploy.util.StringUtils;
-import com.sun.tools.internal.ws.wsdl.document.Import;
 import cscie97.asn1.knowledge.engine.ImportException;
 import cscie97.asn1.knowledge.engine.QueryEngineException;
 
@@ -11,11 +8,11 @@ import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class CommandProcessor {
 
@@ -99,12 +96,26 @@ public class CommandProcessor {
                 //Create a matcher
                 Matcher m = null;
 
+                if (trimmedCommand.isEmpty()){
+                    System.out.println();
+                    continue;
+                }
+
+                //Print a message
+                Pattern consoleMsg = Pattern.compile("console (.*)");
+                m = consoleMsg.matcher(trimmedCommand);
+                if (m.matches()){
+                    System.out.println("SCRIPT_MSG: " + m.group(1));
+                    continue;
+                }
+
+
                 //Add Setting
                 Pattern createSetting = Pattern.compile("define device setting (.*) type (.*)");
                 m = createSetting.matcher(trimmedCommand);
                 if (m.matches()){
                     List<String> result = service.createSetting("1",m.group(1), m.group(2));
-                    System.out.println(StringUtils.join(result, "\n"));
+                    System.out.println(result.stream().collect(Collectors.joining("\n")));
                     continue;
                 }
 
@@ -113,7 +124,7 @@ public class CommandProcessor {
                 m = createMeasure.matcher(trimmedCommand);
                 if (m.matches()){
                     List<String> result = service.createMeasure("1",m.group(1), m.group(2));
-                    System.out.println(StringUtils.join(result, "\n"));
+                    System.out.println(result.stream().collect(Collectors.joining("\n")));
                     continue;
                 }
 
@@ -122,7 +133,7 @@ public class CommandProcessor {
                 m = defineHouse.matcher(trimmedCommand);
                 if (m.matches()){
                     List<String> result = service.createHouse("1",m.group(1), m.group(2), m.group(3));
-                    System.out.println(StringUtils.join(result, "\n"));
+                    System.out.println(result.stream().collect(Collectors.joining("\n")));
                     continue;
                 }
 
@@ -131,7 +142,7 @@ public class CommandProcessor {
                 m = defineRoom.matcher(trimmedCommand);
                 if (m.matches()){
                     List<String> result = service.createRoom("1",m.group(2), m.group(1), m.group(3));
-                    System.out.println(StringUtils.join(result, "\n"));
+                    System.out.println(result.stream().collect(Collectors.joining("\n")));
                     continue;
                 }
 
@@ -140,7 +151,7 @@ public class CommandProcessor {
                 m = defineSensor.matcher(trimmedCommand);
                 if (m.matches()){
                     List<String> result = service.createDevice("1", m.group(3), m.group(1), m.group(2));
-                    System.out.println(StringUtils.join(result, "\n"));
+                    System.out.println(result.stream().collect(Collectors.joining("\n")));
                     continue;
                 }
 
@@ -149,7 +160,7 @@ public class CommandProcessor {
                 m = defineAppliance.matcher(trimmedCommand);
                 if (m.matches()){
                     List<String> result = service.createDevice("1", m.group(3), m.group(1), m.group(2));
-                    System.out.println(StringUtils.join(result, "\n"));
+                    System.out.println(result.stream().collect(Collectors.joining("\n")));
                     continue;
                 }
 
@@ -158,7 +169,7 @@ public class CommandProcessor {
                 m = addFeature.matcher(trimmedCommand);
                 if (m.matches()){
                     List<String> result = service.addFeature("1", m.group(2), m.group(1));
-                    System.out.println(StringUtils.join(result, "\n"));
+                    System.out.println(result.stream().collect(Collectors.joining("\n")));
                     continue;
                 }
 
@@ -167,7 +178,7 @@ public class CommandProcessor {
                 m = defineOccupant.matcher(trimmedCommand);
                 if (m.matches()){
                     List<String> result = service.createOccupant("1", m.group(1), m.group(2), m.group(3));
-                    System.out.println(StringUtils.join(result, "\n"));
+                    System.out.println(result.stream().collect(Collectors.joining("\n")));
                     continue;
                 }
 
@@ -176,7 +187,7 @@ public class CommandProcessor {
                 m = addOccupantToHouse.matcher(trimmedCommand);
                 if (m.matches()){
                     List<String> result = service.addOccupantToHouse("1", m.group(1), m.group(2));
-                    System.out.println(StringUtils.join(result, "\n"));
+                    System.out.println(result.stream().collect(Collectors.joining("\n")));
                     continue;
                 }
 
@@ -185,7 +196,7 @@ public class CommandProcessor {
                 m = moveOccupant.matcher(trimmedCommand);
                 if (m.matches()){
                     List<String> result = service.moveOccupant("1", m.group(1), m.group(2));
-                    System.out.println(StringUtils.join(result, "\n"));
+                    System.out.println(result.stream().collect(Collectors.joining("\n")));
                     continue;
                 }
 
@@ -194,7 +205,7 @@ public class CommandProcessor {
                 m = setDeviceValue.matcher(trimmedCommand);
                 if (m.matches()){
                     List<String> result = service.updateFeature("1", m.group(2), m.group(3), m.group(4));
-                    System.out.println(StringUtils.join(result, "\n"));
+                    System.out.println(result.stream().collect(Collectors.joining("\n")));
                     continue;
                 }
 
@@ -203,7 +214,7 @@ public class CommandProcessor {
                 m = getDeviceValue.matcher(trimmedCommand);
                 if (m.matches()){
                     List<String> result = service.getFeature("1", m.group(2), m.group(3));
-                    System.out.println(StringUtils.join(result, "\n"));
+                    System.out.println(result.stream().collect(Collectors.joining("\n")));
                     continue;
                 }
 
@@ -212,7 +223,7 @@ public class CommandProcessor {
                 m = getDevice.matcher(trimmedCommand);
                 if (m.matches()){
                     List<String> result = service.getDevice("1", m.group(2));
-                    System.out.println(StringUtils.join(result, "\n"));
+                    System.out.println(result.stream().collect(Collectors.joining("\n")));
                     continue;
                 }
 
@@ -221,7 +232,7 @@ public class CommandProcessor {
                 m = getHouse.matcher(trimmedCommand);
                 if (m.matches()){
                     List<String> result = service.getHouse("1", m.group(1));
-                    System.out.println(StringUtils.join(result, "\n"));
+                    System.out.println(result.stream().collect(Collectors.joining("\n")));
                     continue;
                 }
 
@@ -230,7 +241,7 @@ public class CommandProcessor {
                 m = getRoom.matcher(trimmedCommand);
                 if (m.matches()){
                     List<String> result = service.getRoom("1", m.group(1));
-                    System.out.println(StringUtils.join(result, "\n"));
+                    System.out.println(result.stream().collect(Collectors.joining("\n")));
                     continue;
                 }
 
@@ -240,7 +251,7 @@ public class CommandProcessor {
                 m = getAll.matcher(trimmedCommand);
                 if (m.matches()){
                     List<String> result = service.getAll("1");
-                    System.out.println(StringUtils.join(result, "\n"));
+                    System.out.println(result.stream().collect(Collectors.joining("\n")));
                     continue;
                 }
 

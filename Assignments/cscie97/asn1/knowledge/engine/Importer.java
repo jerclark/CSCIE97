@@ -22,7 +22,7 @@ public class Importer {
     public void removeTripleList(HashSet<Triple> triples) throws ImportException{
 
         if (triples.isEmpty()) {
-            System.out.println("Empty input received.");
+            //System.out.println("Empty input received.");
         }else {
             ArrayList<Triple> tripleList = new ArrayList<Triple>(triples);
             for (int i = (tripleList.size() - 1); i >= 0; i--) {
@@ -46,8 +46,11 @@ public class Importer {
                 return;
             }
 
-            //Trim the period from the triples
-            String trimmedTriple = tripleString.replace(".", "");
+            //Trim the trailing period from the triples
+            String trimmedTriple = tripleString;
+            if (tripleString.endsWith(".")){
+                trimmedTriple = trimmedTriple.substring(0, trimmedTriple.length());
+            }
 
             //Break the triple into space-delimited parts
             String[] tripleParts = trimmedTriple.split(" ");
@@ -63,7 +66,7 @@ public class Importer {
         };
 
         if (triples.isEmpty()){
-            System.out.println("Empty input received.");
+            //System.out.println("Empty input received.");
         }else{
             triples.forEach(tripleAdder);
         }

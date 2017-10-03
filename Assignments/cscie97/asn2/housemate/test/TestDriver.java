@@ -1,11 +1,7 @@
 package cscie97.asn2.housemate.test;
-import com.sun.deploy.util.StringUtils;
 import cscie97.asn1.knowledge.engine.ImportException;
-import cscie97.asn1.knowledge.engine.KnowledgeGraph;
 import cscie97.asn1.knowledge.engine.QueryEngineException;
 import cscie97.asn2.housemate.model.*; //HouseMateModelService;
-import javafx.application.Application;
-import org.omg.CORBA.portable.ApplicationException;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -18,9 +14,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Iterator;
 import java.util.List;
-import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class TestDriver {
 
@@ -119,7 +115,7 @@ public class TestDriver {
                 Matcher m = defineHouse.matcher(trimmedCommand);
                 if (m.matches()){
                     List<String> result = service.createHouse("1",m.group(1), m.group(2), m.group(3));
-                    System.out.println(StringUtils.join(result, "\n"));
+                    System.out.println(result.stream().collect(Collectors.joining("\n")));
                 }
 
             }
