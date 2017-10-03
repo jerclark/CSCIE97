@@ -1,0 +1,69 @@
+Operation,Class,Definition
+"public providedMeasures() : Map<measureName,valueType>","Sensing",""
+"public supportedSettings() : Map<settingName,valueType>","Configurable",""
+"private addRoom(roomName : int, floor : int) : void","House",""
+"private addOccupant() : void","House",""
+"public getState() : List<Triples>","House::ConfigurationItem","Retrieves a state/status report for a HouseMate configuration item. Implementors implement this method for the specific needs of it's class. See getHouse, getRoom, getDevice, getDeviceState, getOccupant in the HouseMateModelService Interface class dictionary. "
+"public saveState()","House::ConfigurationItem","Implmentor specifc method for saving state."
+"public getFqn() : String","House::ConfigurationItem","Gets unique identifier for a House Mate Model configuration item. (Hosue/Room/Device/DeviceState/Occupant). Fqns are colon-delimited strings whose form is dictated by the implementor. See class dictionaries for House, Room, Device, DeviceState, Occupant for how they implement."
+"private addDevice(deviceFqn : String) : void","Room",""
+"public createHouse(auth : String, name : String, address : String, numFloors : int) : void","HouseMateModelService","Adds a house to the system"
+"public createRoom(auth : String, roomName : String, houseName : String, floor : int) : void","HouseMateModelService","Adds a room to a specific house in the system"
+"public createDevice(auth : int, name : int, type : int, room : int) : void","HouseMateModelService","Adds a device to a room."
+"public createOccupant(auth : int, name : String, type : String) : void","HouseMateModelService","Adds an occupant to the system. This does not associate the occupant with any specific house or room."
+"public addOccupantToHouse(auth : int, houseName : String, occupant : int) : void","HouseMateModelService","Associates an occupant with a specific house. An occupant can be part 0 or multiple houses."
+"public getHouse(auth : int, houseFqn : char) : List<Triple>","HouseMateModelService","Gets all the state for a specific house. It will be an outline of the following format. Each node in the outline is one or more Triple Strings:
+House FQN
+    House Attribute
+    Occupant ID (Occupants 'associated' with house)
+        Occupant Attributes and State   
+    Room FQN
+        Room Attributes
+        Room occupants
+        Device FQN
+             Device Attributes
+             Device State FQN
+                  Device State Attributes
+                  
+    
+        "
+"public getRoom(auth : int, roomFqn : char) : List<Triple>","HouseMateModelService","Will retrieve the description of a specific room, using a single outline node of the ""Room FQN"" type in the getHouse definition."
+"public getDevice(auth : int, deviceFqn : char) : List<Triple>","HouseMateModelService","Will retrieve the description of a specific device, using a single outline node of the ""Device FQN"" type in the getHouse definition."
+"public getOccupant(auth : int, id : char) : List<Triple>","HouseMateModelService","Will retrieve the description of a specific occupant, using a single outline node of the ""House FQN::Occupatnt FQN"" type in the getHouse definition."
+"public getDeviceStates() : List<Triple>","HouseMateModelService","Will retrieve the description of all device states, with the following for each device state:
+
+Device State FQN (Measure|SettingDevice State name
+      has_value_type {value_type}
+      is_supported_by {device_fqn}"
+"public getDeviceState(auth : int, deviceStateName : int) : TripleStrings","HouseMateModelService","Gets a single device state, as described in getDeviceStates().
+"
+"public moveOccupant(auth : int, occupantId : char, roomFqn : char) : List<Triple>","HouseMateModelService","Places an occupant in a room. Returns the same list of Triples descriing the occupant state after the move."
+"public updateConfigItemName(auth : int, itemFqn : char, name : char) : void","HouseMateModelService",""
+"public addMeasure(auth : int, deviceFqn : int, measureName : int, measureType : int) : void","HouseMateModelService","Creates a 'Measure' (Device State) if it doesn't exist yet, and adds support for that measure the the passed in deviceFqn. For example:
+addMeasaure(auth_token, House:Room:Oven, OvenTemperature, int)
+addMeasaure(auth_token, House:Room:Oven, SurfaceTemperature, int)
+addMeasaure(auth_token, House:Room:Cooktop, SurfaceTemperature, int)
+
+The first two calls will create two supported 'measure' states and support for them to the oven. The third call will not create a new state, but will add the ""SurfaceTemperature"" measure to the Cooktop."
+"public addSetting(auth : String, deviceFqn : String, settingName : String) : void","HouseMateModelService","Creates a 'Setting' (Device State) if it doesn't exist yet, and adds support for that setting the the passed in deviceFqn. For example:
+addSetting(auth_token, House:Room:Oven, TargetTemperature, int)
+addSetting(auth_token, House:Room:Oven, DoorLock, bool)
+addSetting(auth_token, House:Room:Cooktop, burner_1_heat, int)
+"
+"public updateSetting(auth : int, deviceFqn : String, settingFqn : String, value : String) : void","HouseMateModelService",""
+"public updateMeasurement(auth : int, deviceFqn : String, measureFqn : String, value : String) : void","HouseMateModelService",""
+"public getInstance() : HMMSImpl","HouseMateModelService","Gets singleton instance of HMMS."
+"public enterMode(modeName : char) : void","Modable",""
+"public exitMode(modeName : char) : void","Modable",""
+"public availableModes() : List<modeNames>","Modable",""
+"public getFqn() : void","Locatable",""
+"public validateValue() : void","DeviceState",""
+"public getValue() : void","DeviceStateValueType",""
+"public setValue() : void","DeviceStateValueType",""
+"public setValue(value : String) : void","Feature",""
+"public getValue() : String","Feature",""
+"public setValue(value : T) : void","DeviceStateValueValidator<T>",""
+"public getValue() : T","DeviceStateValueValidator<T>",""
+"public isValid(value : boolean) : boolean","DeviceStateValueEnum<E>",""
+"public operation30() : void","DeviceStateValueEnum<E>",""
+"public removeTriple() : void","KnowledgeGraph::KnowledgeGraph",""

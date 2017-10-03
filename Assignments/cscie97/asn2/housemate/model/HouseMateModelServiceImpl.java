@@ -1,13 +1,10 @@
 package cscie97.asn2.housemate.model;
-import com.sun.tools.internal.ws.wsdl.document.Import;
 import cscie97.asn1.knowledge.engine.ImportException;
 import cscie97.asn1.knowledge.engine.QueryEngineException;
-import org.omg.CORBA.DynAnyPackage.Invalid;
-import org.omg.DynamicAny.DynEnum;
-import sun.security.krb5.Config;
 
 import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class HouseMateModelServiceImpl implements HouseMateModelService {
@@ -28,8 +25,7 @@ public class HouseMateModelServiceImpl implements HouseMateModelService {
     //Service-Level lists of items
     private HashMap<String, ConfigurationItem> configMap = new HashMap<String, ConfigurationItem>();
 
-    @Override
-    public House createHouse(String token, String name, String address, int numFloors) throws ItemExistsException, UnauthorizedException {
+    public List<String> createHouse(String token, String name, String address, String numFloors) throws ItemExistsException, UnauthorizedException, QueryEngineException {
 
         //Authorize
         if (!token.contentEquals(VALID_TOKEN)){
@@ -50,12 +46,11 @@ public class HouseMateModelServiceImpl implements HouseMateModelService {
 
         configMap.put(newHouse.getFqn(), newHouse);
 
-        return newHouse;
+        return newHouse.getState();
 
     }
 
-    @Override
-    public Measure createMeasure(String token, String name, String type) throws ItemExistsException, UnauthorizedException, ItemNotFoundException{
+    public List<String> createMeasure(String token, String name, String type) throws ItemExistsException, UnauthorizedException, ItemNotFoundException, QueryEngineException {
 
         //Authorize
         if (!token.contentEquals(VALID_TOKEN)){
@@ -76,11 +71,10 @@ public class HouseMateModelServiceImpl implements HouseMateModelService {
 
         configMap.put(newMeasure.getFqn(), newMeasure);
 
-        return newMeasure;
+        return newMeasure.getState();
     }
 
-    @Override
-    public Setting createSetting(String token, String name, String type) throws ItemExistsException, UnauthorizedException, ItemNotFoundException{
+    public List<String> createSetting(String token, String name, String type) throws ItemExistsException, UnauthorizedException, ItemNotFoundException, QueryEngineException {
 
         //Authorize
         if (!token.contentEquals(VALID_TOKEN)){
@@ -101,11 +95,10 @@ public class HouseMateModelServiceImpl implements HouseMateModelService {
 
         configMap.put(newSetting.getFqn(), newSetting);
 
-        return newSetting;
+        return newSetting.getState();
     }
 
-    @Override
-    public Room createRoom(String token, String houseFqn, String roomName, int floor) throws ItemExistsException, UnauthorizedException, ItemNotFoundException {
+    public List<String> createRoom(String token, String houseFqn, String roomName, String floor) throws ItemExistsException, UnauthorizedException, ItemNotFoundException, QueryEngineException {
 
         //Authorize
         if (!token.contentEquals(VALID_TOKEN)){
@@ -125,11 +118,11 @@ public class HouseMateModelServiceImpl implements HouseMateModelService {
         }
 
         this.configMap.put(newRoom.getFqn(), (Room)newRoom);
-        return newRoom;
+        return newRoom.getState();
 
     }
 
-    public Occupant createOccupant(String token, String occupantId, String name, String type) throws ItemExistsException, UnauthorizedException, ItemNotFoundException, ImportException {
+    public List<String> createOccupant(String token, String occupantId, String name, String type) throws ItemExistsException, UnauthorizedException, ItemNotFoundException, ImportException {
 
         //Authorize
         if (!token.contentEquals(VALID_TOKEN)){
@@ -146,11 +139,11 @@ public class HouseMateModelServiceImpl implements HouseMateModelService {
         Occupant newOccupant = new Occupant(occupantId,name,type);
         this.configMap.put(newOccupant.getFqn(), newOccupant);
         newOccupant.saveState();
-        return newOccupant;
+        return newOccupant.getState();
 
     }
 
-    public void addOccupantToHouse(String token, String occupantId, String houseFqn) throws ItemExistsException, UnauthorizedException, ItemNotFoundException, ImportException {
+    public List<String> addOccupantToHouse(String token, String occupantId, String houseFqn) throws ItemExistsException, UnauthorizedException, ItemNotFoundException, ImportException {
 
         //Authorize
         if (!token.contentEquals(VALID_TOKEN)){
@@ -176,11 +169,11 @@ public class HouseMateModelServiceImpl implements HouseMateModelService {
         house.addOccupant(occupant);
         house.saveState();
 
-
+        return occupant.getState();
 
     }
 
-    public void moveOccupant(String token, String occupantId, String roomFqn) throws ItemExistsException, UnauthorizedException, ItemNotFoundException, ImportException {
+    public List<String> moveOccupant(String token, String occupantId, String roomFqn) throws ItemExistsException, UnauthorizedException, ItemNotFoundException, ImportException {
 
         //Authorize
         if (!token.contentEquals(VALID_TOKEN)){
@@ -206,12 +199,11 @@ public class HouseMateModelServiceImpl implements HouseMateModelService {
         occupant.saveState();
         room.saveState();
 
+        return occupant.getState();
+
     }
 
-
-
-    @Override
-    public Device createDevice(String token, String roomFqn, String deviceName, String deviceTypeName) throws ItemExistsException, UnauthorizedException, ItemNotFoundException {
+    public List<String> createDevice(String token, String roomFqn, String deviceName, String deviceTypeName) throws ItemExistsException, UnauthorizedException, ItemNotFoundException, QueryEngineException {
 
         //Authorize
         if (!token.contentEquals(VALID_TOKEN)){
@@ -234,11 +226,11 @@ public class HouseMateModelServiceImpl implements HouseMateModelService {
         }
 
         this.configMap.put(newDevice.getFqn(), newDevice);
-        return newDevice;
+        return newDevice.getState();
 
     }
 
-    public Feature addFeature(String token, String deviceFqn, String deviceStateFqn) throws ItemExistsException, UnauthorizedException, ItemNotFoundException {
+    public List<String> addFeature(String token, String deviceFqn, String deviceStateFqn) throws ItemExistsException, UnauthorizedException, ItemNotFoundException, QueryEngineException {
 
         //Authorize
         if (!token.contentEquals(VALID_TOKEN)){
@@ -263,7 +255,7 @@ public class HouseMateModelServiceImpl implements HouseMateModelService {
             ConfigurationItem existingItem = this.configMap.get(featureFqn);
             if (existingItem.getClass() == Feature.class){
                 System.out.println("Support for " + deviceStateFqn + " has already been enabled on " + deviceFqn + ". No action taken.");
-                return (Feature)existingItem;
+                return existingItem.getState();
             }
         }
 
@@ -276,11 +268,11 @@ public class HouseMateModelServiceImpl implements HouseMateModelService {
             System.out.println(ie);
         }
         this.configMap.put(newFeature.getFqn(), newFeature);
-        return newFeature;
+        return newFeature.getState();
 
     }
 
-    public void updateFeature(String token, String deviceFqn, String deviceStateFqn, String value) throws UnsupportedFeatureException, UnauthorizedException, ItemNotFoundException, ImportException,InvalidDeviceStateValueException {
+    public List<String> updateFeature(String token, String deviceFqn, String deviceStateFqn, String value) throws UnsupportedFeatureException, UnauthorizedException, ItemNotFoundException, ImportException, InvalidDeviceStateValueException, QueryEngineException {
 
         //Authorize
         if (!token.contentEquals(VALID_TOKEN)){
@@ -303,6 +295,8 @@ public class HouseMateModelServiceImpl implements HouseMateModelService {
         Feature targetFeature = (Feature)this.configMap.get(featureFqn);
         targetFeature.setValue(value);
         targetFeature.saveState();
+
+        return targetDevice.getState();
 
 
     }
@@ -346,6 +340,19 @@ public class HouseMateModelServiceImpl implements HouseMateModelService {
         return this.configMap.get(deviceFqn).getState();
     }
 
+    public List<String> getOccupant(String token, String occupantFqn) throws UnauthorizedException, ItemNotFoundException,QueryEngineException{
+        //Authorize
+        if (!token.contentEquals(VALID_TOKEN)){
+            throw new UnauthorizedException();
+        }
+
+        //Check for device
+        if (!this.configMap.containsKey(occupantFqn)){
+            throw new ItemNotFoundException(occupantFqn);
+        }
+        return this.configMap.get(occupantFqn).getState();
+    }
+
     public List<String> getDeviceState(String token, String deviceStateFqn) throws UnauthorizedException, ItemNotFoundException,QueryEngineException{
         //Authorize
         if (!token.contentEquals(VALID_TOKEN)){
@@ -359,7 +366,34 @@ public class HouseMateModelServiceImpl implements HouseMateModelService {
         return this.configMap.get(deviceStateFqn).getState();
     }
 
+    public List<String> getFeature(String token, String deviceFqn, String deviceStateFqn) throws UnauthorizedException, ItemNotFoundException,QueryEngineException{
+        //Authorize
+        if (!token.contentEquals(VALID_TOKEN)){
+            throw new UnauthorizedException();
+        }
 
+        //Check for feature with this
+        String featureFqn = deviceFqn + ":" + deviceStateFqn;
+        if (!this.configMap.containsKey(featureFqn)){
+            throw new ItemNotFoundException(featureFqn);
+        }
 
+        return this.configMap.get(featureFqn).getState();
+    }
+
+    public List<String> getAll(String token) throws UnauthorizedException, ItemNotFoundException,QueryEngineException{
+        //Authorize
+        if (!token.contentEquals(VALID_TOKEN)){
+            throw new UnauthorizedException();
+        }
+
+        List<String> allState = new ArrayList<String>();
+        Iterator<ConfigurationItem> configItemIterator = configMap.values().iterator();
+        while(configItemIterator.hasNext()){
+            allState.addAll(configItemIterator.next().getState());
+        }
+        return allState;
+
+    }
 
 }

@@ -7,14 +7,14 @@ import java.util.function.Consumer;
 public class Room implements ConfigurationItem {
 
     private String name;
-    private int floor;
+    private String floor;
     private HashMap<String, Device> devices = new HashMap<String, Device>();
     private HashMap<String, Occupant> occupants = new HashMap<String, Occupant>();
     private House house;
     private Fetcher fetcher = new StandardFetcher();
 
 
-    public Room(String name, int floor, House house) {
+    public Room(String name, String floor, House house) {
         this.name = name.replace(" ", "_");
         this.floor = floor;
         this.house = house;

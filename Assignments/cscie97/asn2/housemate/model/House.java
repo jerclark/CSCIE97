@@ -1,5 +1,4 @@
 package cscie97.asn2.housemate.model;
-import com.sun.tools.internal.ws.wsdl.document.Import;
 import cscie97.asn1.knowledge.engine.*;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -12,14 +11,14 @@ public class House implements ConfigurationItem {
 
     private String name;
     private final String address;
-    private int numFloors;
+    private String numFloors;
     private HashMap<String, Room> rooms = new HashMap<String, Room>();
     private Fetcher fetcher = new StandardFetcher();
     private HashMap<String, Occupant> occupants = new HashMap<String, Occupant>();
 
 
 
-    public House(String name, String address, int numFloors){
+    public House(String name, String address, String numFloors){
         this.name = name.replace(" ", "_");
         this.address = address.replace(" ", "_");
         this.numFloors = numFloors;
@@ -27,7 +26,7 @@ public class House implements ConfigurationItem {
 
     @Override
     public String getFqn(){
-        return this.name + this.address;
+        return this.name;
     };
 
     @Override
@@ -54,6 +53,7 @@ public class House implements ConfigurationItem {
         ArrayList<String> triples = new ArrayList<String>();
         triples.add(getFqn() + " has_address " + this.address);
         triples.add(getFqn() + " has_name " + this.name);
+        triples.add(getFqn() + " has_num_floors " + this.numFloors);
         Consumer<Room> getRoomTriple = (room) -> {
             triples.add(getFqn() + " has_room " + room.getName());
         };
@@ -70,7 +70,7 @@ public class House implements ConfigurationItem {
         saveState();
     }
 
-    protected Room addRoom(String roomName, int floor) throws ItemExistsException{
+    protected Room addRoom(String roomName, String floor) throws ItemExistsException{
         Room newRoom = new Room(roomName, floor, this);
         if (this.rooms.containsKey(newRoom.getFqn())){
             throw new ItemExistsException(newRoom.getFqn(), newRoom);
