@@ -1,0 +1,23 @@
+# Testing Feature Not Supported
+console Test UnsupportedFeatureException
+
+console Create temperature measure and target_temperature setting
+define measure temperature type Float
+define setting target_temperature type Float
+
+console Adding house, room, device
+define house House1 address 115_Hamlet_St floors 2
+define room Kitchen house House1 floor 1
+define appliance Oven type Oven room House1:Kitchen
+
+console Add target_temperature feature to oven
+add feature Setting:target_temperature House1:Kitchen:Oven
+
+console Set temperature value on oven, won't work
+set appliance House1:Kitchen:Oven status Measure:temperature value 200.0
+
+console Add the feature to oven
+add feature Measure:temperature device House1:Kitchen:Oven
+
+console Set the value now, should work
+set appliance House1:Kitchen:Oven status Measure:temperature value 200.0

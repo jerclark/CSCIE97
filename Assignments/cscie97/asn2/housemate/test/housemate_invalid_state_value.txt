@@ -1,0 +1,24 @@
+# Testing Invalid State Value
+console Test InvalidDeviceStateValueException
+
+console Create temperature measure and burner_1_heat setting
+define measure temperature type Float
+define setting burner_1_heat type HIGH|MED|LOW
+
+console Adding house, room, device
+define house House1 address 115_Hamlet_St floors 2
+define room Kitchen house House1 floor 1
+define appliance Oven type Oven room House1:Kitchen
+
+
+console Add the features to oven
+add feature Measure:temperature device House1:Kitchen:Oven
+add feature Setting:burner_1_heat device House1:Kitchen:Oven
+
+console Set invalid values
+set appliance House1:Kitchen:Oven status Measure:temperature value ON
+set appliance House1:Kitchen:Oven status Setting:burner_1_heat value HOT
+
+console Set valid values
+set appliance House1:Kitchen:Oven status Measure:temperature value 200.5
+set appliance House1:Kitchen:Oven status Setting:burner_1_heat value HIGH

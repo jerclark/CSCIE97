@@ -8,6 +8,12 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 
+/**
+ * Interface to define "fetching" behavior when a ConfigItem calls getState()
+ *
+ * @see ConfigurationItem
+ * @see StandardFetcher
+ */
 public interface Fetcher {
     public ArrayList<String> getState(String subject);
 }

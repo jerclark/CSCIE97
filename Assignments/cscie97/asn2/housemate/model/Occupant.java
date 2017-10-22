@@ -4,6 +4,10 @@ import cscie97.asn1.knowledge.engine.*;
 import java.util.*;
 import java.util.function.Consumer;
 
+/**
+ * An Occupant within the system. Occupants are of various types, which can be entitled to different
+ * interactions with the HouseMate System.
+ */
 public class Occupant implements ConfigurationItem {
 
     private String id = null;
@@ -30,6 +34,10 @@ public class Occupant implements ConfigurationItem {
     }
 
     @Override
+    /**
+     * Clear out stale state, and save new state.
+     * Saves all native attributes, as well as the room it's in and the houses its part of.
+     */
     public void saveState() throws ImportException {
 
         HashSet<Triple> staleState = KnowledgeGraph.getInstance().executeQuery(getFqn(), "?", "?");
@@ -51,11 +59,6 @@ public class Occupant implements ConfigurationItem {
 
         //Get the current state
         importer.importTripleList(newState);
-    }
-
-    @Override
-    public void setName(String newName) throws ImportException {
-        this.name = newName;
     }
 
     protected String getName() {

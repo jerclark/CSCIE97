@@ -1,0 +1,108 @@
+console CONTROLLER MAIN TESTS
+
+console ***********************
+console MODEL SETUP
+console ***********************
+
+console CREATE HOUSE AND LIVING ROOM
+define house House1 address 115_Hamlet_St floors 2
+define room LivingRoom house House1 floor 1
+
+console CONFIGURE AVA
+define appliance Ava type smartspeaker room House1:LivingRoom
+define measure voice_command type String
+add feature Measure:voice_command device House1:LivingRoom:Ava
+
+console CONFIGURE SMART DOOR
+define appliance Door type door room House1:LivingRoom
+define setting door_state type OPEN|CLOSED
+add feature Setting:door_state device House1:LivingRoom:Door
+console INIT DOOR TO CLOSED
+set appliance House1:LivingRoom:Door status Setting:door_state value CLOSED
+
+console CONFIGURE LIVING ROOM LIGHTS
+define appliance MainLights type lights room House1:LivingRoom
+define appliance Sconces type lights room House1:LivingRoom
+define setting Light_Power type ON|OFF
+add feature Setting:Light_Power device House1:LivingRoom:MainLights
+add feature Setting:Light_Power device House1:LivingRoom:Sconces
+console INIT LIGHTS TO OFF
+set appliance House1:LivingRoom:MainLights status Setting:Light_Power value OFF
+set appliance House1:LivingRoom:Sconces status Setting:Light_Power value OFF
+
+
+
+console ***********************
+console RULE CREATION
+console ***********************
+
+console CREATE RULE TO OPEN LR DOOR
+create context name House1Context type house fqn House1
+create feature_update_command OpenLivingRoomDoor instructions var r = {'targetDeviceScope':'House1:LivingRoom:Door', 'targetDeviceStateFqn':'Setting:door_state', 'targetValue':'OPEN'};r;
+create rule_predicate name AvaVoiceCommandIsDoorOpen test var r = (context['House1:LivingRoom:Ava:Measure:voice_command'].is_detecting == 'Open_Door'); r;
+create rule LivingRoomOpenDoorRule
+add context House1Context rule LivingRoomOpenDoorRule
+add predicate AvaVoiceCommandIsDoorOpen rule LivingRoomOpenDoorRule
+add command OpenLivingRoomDoor rule LivingRoomOpenDoorRule
+
+console CREATE RULE TO CLOSE LR DOOR
+create feature_update_command CloseLivingRoomDoor instructions var r = {'targetDeviceScope':'House1:LivingRoom:Door', 'targetDeviceStateFqn':'Setting:door_state', 'targetValue':'CLOSED'};r;
+create rule_predicate name AvaVoiceCommandDoorClose test var r = (context['House1:LivingRoom:Ava:Measure:voice_command'].is_detecting == 'Close_Door'); r;
+create rule LivingRoomCloseDoorRule
+add context House1Context rule LivingRoomCloseDoorRule
+add predicate AvaVoiceCommandDoorClose rule LivingRoomCloseDoorRule
+add command CloseLivingRoomDoor rule LivingRoomCloseDoorRule
+
+console CREATE RULE TO TURN ALL LR LIGHTS ON
+create feature_update_command TurnAllLivingRoomLightsOn instructions var r = {'targetDeviceScope':'House1:LivingRoom:', 'targetDeviceStateFqn':'Setting:Light_Power', 'targetValue':'ON'};r;
+create rule_predicate name AvaVoiceCommandLightsOn test var r = (context['House1:LivingRoom:Ava:Measure:voice_command'].is_detecting == 'Lights_On'); r;
+create rule LivingRoomLightsOn
+add context House1Context rule LivingRoomLightsOn
+add predicate AvaVoiceCommandLightsOn rule LivingRoomLightsOn
+add command TurnAllLivingRoomLightsOn rule LivingRoomLightsOn
+
+console CREATE RULE TO TURN ALL LR LIGHTS OFF
+create feature_update_command TurnAllLivingRoomLightsOff instructions var r = {'targetDeviceScope':'House1:LivingRoom:', 'targetDeviceStateFqn':'Setting:Light_Power', 'targetValue':'OFF'};r;
+create rule_predicate name AvaVoiceCommandLightsOff test var r = (context['House1:LivingRoom:Ava:Measure:voice_command'].is_detecting == 'Lights_Off'); r;
+create rule LivingRoomLightsOff
+add context House1Context rule LivingRoomLightsOff
+add predicate AvaVoiceCommandLightsOff rule LivingRoomLightsOff
+add command TurnAllLivingRoomLightsOff rule LivingRoomLightsOff
+
+console SUBSCRIBE RULE TO VOICE COMMAND UPDATES
+subscribe feature House1:LivingRoom:Ava:Measure:voice_command rule LivingRoomOpenDoorRule
+subscribe feature House1:LivingRoom:Ava:Measure:voice_command rule LivingRoomCloseDoorRule
+subscribe feature House1:LivingRoom:Ava:Measure:voice_command rule LivingRoomLightsOff
+subscribe feature House1:LivingRoom:Ava:Measure:voice_command rule LivingRoomLightsOn
+
+
+
+console ***********************
+console MODEL UPDATES AND COMMAND EXECUTION
+console ***********************
+
+console SEND OPEN DOOR COMMAND
+set appliance House1:LivingRoom:Ava status Measure:voice_command value Open_Door
+
+console CHECK RESULTS
+show appliance House1:LivingRoom:Door status Setting:door_state
+
+console SEND CLOSE DOOR COMMAND
+set appliance House1:LivingRoom:Ava status Measure:voice_command value Close_Door
+
+console CHECK RESULTS
+show appliance House1:LivingRoom:Door status Setting:door_state
+
+console SEND LIGHTS ON COMMAND
+set appliance House1:LivingRoom:Ava status Measure:voice_command value Lights_On
+
+console CHECK RESULTS
+show appliance House1:LivingRoom:MainLights status Setting:Light_Power
+show appliance House1:LivingRoom:Sconces status Setting:Light_Power
+
+console SEND LIGHTS OFF COMMAND
+set appliance House1:LivingRoom:Ava status Measure:voice_command value Lights_Off
+
+console CHECK RESULTS
+show appliance House1:LivingRoom:MainLights status Setting:Light_Power
+show appliance House1:LivingRoom:Sconces status Setting:Light_Power

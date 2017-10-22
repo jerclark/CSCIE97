@@ -5,18 +5,37 @@ import org.omg.CORBA.DynAnyPackage.Invalid;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Observable;
 
-public class Feature implements ConfigurationItem{
+
+/**
+ * An association class representing the availability of a DeviceState on a Device.
+ * It holds the state 'value' of a DeviceState on that Device. For example, if a Device measures "temperature",
+ * a Device (probably named ‘thermometer’ but it can be named anything) has a Feature that relates a Measure object
+ * with name=“temperature” as its DeviceState.
+ * The current value of that feature would be the temperature of the thermometer.
+ */
+public class Feature extends Observable implements ConfigurationItem {
 
     private DeviceState deviceState = null;
     private Device device = null;
     private Fetcher fetcher = new StandardFetcher();
     private String value = null;
 
-    public Feature(DeviceState ds, Device d){
+    public Feature(DeviceState ds, Device d) {
         this.deviceState = ds;
         this.device = d;
         this.value = "INITIAL_VALUE_UNDEFINED";
+
+        Importer importer = new Importer();
+        List<String> deviceSupportTriple = new ArrayList<String>();
+        deviceSupportTriple.add(this.deviceState.getFqn() + " is_supported_by " + this.device.getFqn());
+        try {
+            importer.importTripleList(deviceSupportTriple);
+        } catch (ImportException e) {
+            System.err.println(e);
+        }
     }
 
     @Override
@@ -49,6 +68,8 @@ public class Feature implements ConfigurationItem{
         Importer importer = new Importer();
         importer.removeTripleList(staleState);
         importer.importTripleList(newState);
+        setChanged();
+        notifyObservers();
     }
 
     public void setName(String name) throws ImportException { }
@@ -59,6 +80,7 @@ public class Feature implements ConfigurationItem{
 
     public void setValue(String value) throws InvalidDeviceStateValueException {
         if (!this.deviceState.validateValue(value)){
+            String availableFeatures = this.device.getFeatures().toString();
             throw new InvalidDeviceStateValueException(this.deviceState.getFqn(), this.deviceState.valueType, value);
         }
         this.value = value;

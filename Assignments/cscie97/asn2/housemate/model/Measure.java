@@ -6,6 +6,11 @@ import cscie97.asn1.knowledge.engine.QueryEngineException;
 
 import java.util.ArrayList;
 
+/**
+ * Represents measured or detected "State" of a Device - effectively making it a Sensor.
+ * The key difference from sibling subclass "Setting" is in the implementation of "saveState()" as it uses a
+ * different predicate to represent the facts in the KnowledgeBase.
+ */
 public class Measure extends DeviceState {
 
     private Fetcher fetcher = new StandardFetcher();
@@ -14,6 +19,10 @@ public class Measure extends DeviceState {
         super(name, valueType);
     }
 
+    /**
+     * * Returns "Measure:" + setting name
+     * @return
+     */
     public String getFqn(){
         return "Measure:" + this.name;
     };
@@ -22,6 +31,10 @@ public class Measure extends DeviceState {
         return fetcher.getState(getFqn());
     };
 
+    /**
+     * Saves the state of the measure
+     * @throws ImportException
+     */
     public void saveState() throws ImportException{
         Importer importer = new Importer();
         ArrayList<String> triples = new ArrayList<String>();
@@ -30,8 +43,6 @@ public class Measure extends DeviceState {
         importer.importTripleList(triples);
     };
 
-    public void setName(String newName) throws ImportException{
-    };
 
 
 }

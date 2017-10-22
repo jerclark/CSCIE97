@@ -1,0 +1,26 @@
+# Testing Item Exists Exceptions
+console Test ItemExistsException
+
+console Define Occupant
+define occupant me name Jeremy Clark type Adult
+
+console Define Occupant with same ID
+define occupant me name Someone Else type Adult
+
+console Adding House
+define house House1 address 115_Hamlet_St floors 2
+
+console Adding House with same name
+define house House1 address 115_Hamlet_St floors 3
+
+console Adding Room Kitchen 'define room Kitchen house House1 floor 1'
+define room Kitchen house House1 floor 1
+
+console Adding Room with same name and house
+define room Kitchen house House1 floor 2
+
+console Adding DeviceState temperature 'define measure temperature type Float'
+define measure temperature type Float
+
+console Adding DeviceState temperature Again
+define measure temperature type Float

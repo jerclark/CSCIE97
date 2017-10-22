@@ -1,0 +1,11 @@
+# Testing Item not found
+console Test ItemNotFoundException
+
+console Adding house
+define house House1 address 115_Hamlet_St floors 2
+
+console Adding room to house that doesn't exist
+define room Kitchen house House2 floor 1
+
+console Addding device to room that doesn't exist
+define appliance Oven type oven room NotARealRoom

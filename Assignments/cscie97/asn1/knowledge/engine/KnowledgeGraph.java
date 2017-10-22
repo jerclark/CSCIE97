@@ -289,6 +289,11 @@ public class KnowledgeGraph {
         }
     }
 
+    public void removeAllTriples(){
+        tripleMap.clear();
+        queryMapSet.clear();
+    }
+
 
 
 }

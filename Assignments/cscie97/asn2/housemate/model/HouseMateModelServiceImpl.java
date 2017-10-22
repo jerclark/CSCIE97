@@ -1,11 +1,9 @@
 package cscie97.asn2.housemate.model;
 import cscie97.asn1.knowledge.engine.ImportException;
+import cscie97.asn1.knowledge.engine.KnowledgeGraph;
 import cscie97.asn1.knowledge.engine.QueryEngineException;
 
-import java.util.HashMap;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class HouseMateModelServiceImpl implements HouseMateModelService {
 
@@ -122,7 +120,7 @@ public class HouseMateModelServiceImpl implements HouseMateModelService {
 
     }
 
-    public List<String> createOccupant(String token, String occupantId, String name, String type) throws ItemExistsException, UnauthorizedException, ItemNotFoundException, ImportException {
+    public List<String> createOccupant(String token, String occupantId, String name, String type) throws ItemExistsException, UnauthorizedException, ImportException {
 
         //Authorize
         if (!token.contentEquals(VALID_TOKEN)){
@@ -301,6 +299,8 @@ public class HouseMateModelServiceImpl implements HouseMateModelService {
 
     }
 
+
+
     public List<String> getHouse(String token, String houseFqn) throws UnauthorizedException, ItemNotFoundException,QueryEngineException{
         //Authorize
         if (!token.contentEquals(VALID_TOKEN)){
@@ -366,20 +366,62 @@ public class HouseMateModelServiceImpl implements HouseMateModelService {
         return this.configMap.get(deviceStateFqn).getState();
     }
 
-    public List<String> getFeature(String token, String deviceFqn, String deviceStateFqn) throws UnauthorizedException, ItemNotFoundException,QueryEngineException{
+    public List<String> getFeature(String token, String featureFqn) throws UnauthorizedException, ItemNotFoundException,QueryEngineException{
+
         //Authorize
         if (!token.contentEquals(VALID_TOKEN)){
             throw new UnauthorizedException();
         }
 
-        //Check for feature with this
-        String featureFqn = deviceFqn + ":" + deviceStateFqn;
+        //Check for feature with this FQN
         if (!this.configMap.containsKey(featureFqn)){
             throw new ItemNotFoundException(featureFqn);
         }
-
         return this.configMap.get(featureFqn).getState();
+
     }
+
+    public List<String> getFeature(String token, String deviceFqn, String deviceStateFqn) throws UnauthorizedException, ItemNotFoundException,QueryEngineException{
+
+        //Authorize
+        if (!token.contentEquals(VALID_TOKEN)){
+            throw new UnauthorizedException();
+        }
+
+        String featureFqn = deviceFqn + ":" + deviceStateFqn;
+        return getFeature(token, featureFqn);
+
+    }
+
+    public void subscribeToFeature(String token, String featureFqn, Observer o) throws UnauthorizedException, ItemNotFoundException{
+        //Authorize
+        if (!token.contentEquals(VALID_TOKEN)){
+            throw new UnauthorizedException();
+        }
+
+        //Check for feature with this FQN
+        if (!this.configMap.containsKey(featureFqn)){
+            throw new ItemNotFoundException(featureFqn);
+        }
+        ConfigurationItem targetFeature = this.configMap.get(featureFqn);
+        ((Feature)targetFeature).addObserver(o);
+    }
+
+
+    public void unsubscribeFromFeature(String token, String featureFqn, Observer o) throws UnauthorizedException, ItemNotFoundException{
+        //Authorize
+        if (!token.contentEquals(VALID_TOKEN)){
+            throw new UnauthorizedException();
+        }
+
+        //Check for feature with this FQN
+        if (!this.configMap.containsKey(featureFqn)){
+            throw new ItemNotFoundException(featureFqn);
+        }
+        ConfigurationItem targetFeature = this.configMap.get(featureFqn);
+        ((Feature)targetFeature).deleteObserver(o);
+    }
+
 
     public List<String> getAll(String token) throws UnauthorizedException, ItemNotFoundException,QueryEngineException{
         //Authorize
@@ -393,6 +435,17 @@ public class HouseMateModelServiceImpl implements HouseMateModelService {
             allState.addAll(configItemIterator.next().getState());
         }
         return allState;
+
+    }
+
+    public void removeAll(String token) throws UnauthorizedException {
+        //Authorize
+        if (!token.contentEquals(VALID_TOKEN)){
+            throw new UnauthorizedException();
+        }
+
+        configMap.clear();
+        KnowledgeGraph.getInstance().removeAllTriples();
 
     }
 

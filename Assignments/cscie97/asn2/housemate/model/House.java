@@ -7,6 +7,9 @@ import java.util.Iterator;
 import java.util.function.Consumer;
 
 
+/**
+ * Root node of a House Mate configuration. All Rooms, Devices, and Features within the service are related to a single house.
+ */
 public class House implements ConfigurationItem {
 
     private String name;
@@ -17,7 +20,13 @@ public class House implements ConfigurationItem {
     private HashMap<String, Occupant> occupants = new HashMap<String, Occupant>();
 
 
-
+    /**
+     * Constructor. Will replace white space with "_" in the name and address.
+     *
+     * @param name
+     * @param address
+     * @param numFloors
+     */
     public House(String name, String address, String numFloors){
         this.name = name.replace(" ", "_");
         this.address = address.replace(" ", "_");
@@ -25,11 +34,21 @@ public class House implements ConfigurationItem {
     }
 
     @Override
+    /**
+     * Returns the name
+     *
+     * @param name
+     * @param address
+     * @param numFloors
+     */
     public String getFqn(){
         return this.name;
     };
 
     @Override
+    /**
+     * Returns all attributes of the house, as well the state of all rooms
+     */
     public ArrayList<String> getState() throws QueryEngineException{
         ArrayList<String> houseState = this.fetcher.getState(getFqn());
         Collection<Room> rooms = this.rooms.values();
@@ -42,6 +61,10 @@ public class House implements ConfigurationItem {
 
 
     @Override
+    /**
+     * Clears out stale state and sets new state.
+     * All attributes, as well as room names.
+     */
     public void saveState() throws ImportException {
         Importer importer = new Importer();
         ArrayList<String> currentState = new ArrayList<String>();
@@ -62,14 +85,14 @@ public class House implements ConfigurationItem {
         importer.importTripleList(triples);
     }
 
-    public void setName(String name) throws ImportException {
-        if (name.contentEquals(this.name)) {
-            return;
-        }
-        this.name = name;
-        saveState();
-    }
-
+    /**
+     * Adds an room to the house
+     *
+     * @param roomName
+     * @param floor
+     * @return
+     * @throws ItemExistsException
+     */
     protected Room addRoom(String roomName, String floor) throws ItemExistsException{
         Room newRoom = new Room(roomName, floor, this);
         if (this.rooms.containsKey(newRoom.getFqn())){
@@ -79,6 +102,12 @@ public class House implements ConfigurationItem {
         return newRoom;
     }
 
+    /**
+     * Adds a transient occupant to the house
+     *
+     * @param occupant
+     * @throws ItemExistsException
+     */
     protected void addOccupant(Occupant occupant) throws ItemExistsException{
         if (this.occupants.containsKey(occupant.getFqn())){
             System.out.println(occupant.getFqn() + " is already a member of house " + this.getFqn());
