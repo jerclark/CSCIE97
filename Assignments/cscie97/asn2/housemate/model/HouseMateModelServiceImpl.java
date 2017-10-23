@@ -185,21 +185,55 @@ public class HouseMateModelServiceImpl implements HouseMateModelService {
         }
 
         //Check if the room exists
-        if (!configMap.containsKey(roomFqn)){
+        if (!configMap.containsKey(roomFqn) && !roomFqn.contentEquals("null")){
             throw new ItemNotFoundException(roomFqn);
         }
 
+
         //OK then, move the occupant.
         Occupant occupant = (Occupant)configMap.get(occupantFqn);
-        Room room = (Room)configMap.get(roomFqn);
-        occupant.setRoom(room);
-        room.addOccupant(occupant);
+        Room currentRoom = occupant.getRoom();
+        if (currentRoom != null){
+            currentRoom.removeOccupant(occupant);
+            currentRoom.saveState();
+        }
+        Room newRoom = null;
+        if (roomFqn.contentEquals("null")) {
+            occupant.setRoom(null);
+        }else{
+            newRoom = (Room) configMap.get(roomFqn);
+            occupant.setRoom(newRoom);
+            newRoom.addOccupant(occupant);
+            newRoom.saveState();
+        }
         occupant.saveState();
-        room.saveState();
 
         return occupant.getState();
 
     }
+
+    public List<String> setOccupantActivity(String token, String occupantId, Boolean activityState) throws ItemExistsException, UnauthorizedException, ItemNotFoundException, ImportException {
+
+        //Authorize
+        if (!token.contentEquals(VALID_TOKEN)){
+            throw new UnauthorizedException();
+        }
+
+        //Check if an occupant with the same fqn exists
+        String occupantFqn = "Occupant:" + occupantId;
+        if (!configMap.containsKey(occupantFqn)){
+            throw new ItemNotFoundException(occupantFqn);
+        }
+
+        //OK then, set occupant state
+        Occupant occupant = (Occupant)configMap.get(occupantFqn);
+        occupant.setIsActive(activityState);
+        occupant.saveState();
+
+        return occupant.getState();
+
+    }
+
 
     public List<String> createDevice(String token, String roomFqn, String deviceName, String deviceTypeName) throws ItemExistsException, UnauthorizedException, ItemNotFoundException, QueryEngineException {
 

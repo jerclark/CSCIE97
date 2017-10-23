@@ -281,6 +281,15 @@ public class CommandProcessor {
                         continue;
                     }
 
+                    //Get occupant
+                    Pattern getOccupant = Pattern.compile("show configuration occupant (.*)");
+                    m = getOccupant.matcher(trimmedCommand);
+                    if (m.matches()) {
+                        List<String> result = service.getOccupant("1", m.group(1));
+                        System.out.println(result.stream().collect(Collectors.joining("\n")));
+                        continue;
+                    }
+
 
                     //Get all
                     Pattern getAll = Pattern.compile("show configuration");
@@ -323,7 +332,7 @@ public class CommandProcessor {
                     }
 
                     //Add Feature Update Command
-                    Pattern createCommand = Pattern.compile("create feature_update_command (.*) instructions (.*)");
+                    Pattern createCommand = Pattern.compile("create feature_update_command name (.*) instructions (.*)");
                     m = createCommand.matcher(trimmedCommand);
                     if (m.matches()) {
                         Command result = controllerService.createCommand("1", m.group(1), m.group(2), ConfigItemCommandType.FEATURE_UPDATE_COMMAND);
@@ -337,6 +346,15 @@ public class CommandProcessor {
                     m = createMoveCommand.matcher(trimmedCommand);
                     if (m.matches()) {
                         Command result = controllerService.createCommand("1", m.group(1), m.group(2), ConfigItemCommandType.MOVE_OCCUPANT_COMMAND);
+                        System.out.println("Created command: " + m.group(1));
+                        continue;
+                    }
+
+                    //Add Set Occupant Activity Command
+                    Pattern createOccupantActivityCommand = Pattern.compile("create set_occupant_activity_command name (.*) instructions (.*)");
+                    m = createOccupantActivityCommand.matcher(trimmedCommand);
+                    if (m.matches()) {
+                        Command result = controllerService.createCommand("1", m.group(1), m.group(2), ConfigItemCommandType.SET_OCCUPANT_ACTIVITY_COMMAND);
                         System.out.println("Created command: " + m.group(1));
                         continue;
                     }
@@ -373,6 +391,9 @@ public class CommandProcessor {
                                 break;
                             case "occupant":
                                 ciType = ConfigItemType.CONFIG_ITEM_TYPE_OCCUPANT;
+                                break;
+                            case "all":
+                                ciType = ConfigItemType.CONFIG_ITEM_ALL;
                                 break;
                         }
                         Context result = controllerService.createContext("1", m.group(1), ciType, m.group(3));

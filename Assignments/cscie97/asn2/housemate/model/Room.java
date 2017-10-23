@@ -70,6 +70,7 @@ public class Room implements ConfigurationItem {
             updatedState.add(getFqn() + " has_occupant " + occupant.getName());
         };
         this.occupants.values().forEach(getOccupantTriple);
+        updatedState.add(getFqn() + " has_occupant_count " + this.occupants.size());
 
         //Get the stale state as the result of a query
         HashSet<Triple> currentState = KnowledgeGraph.getInstance().executeQuery(getFqn(), "?", "?");
@@ -111,6 +112,18 @@ public class Room implements ConfigurationItem {
             System.out.println("Occupant " + occupant.getFqn() + " is already located in room " + this.getFqn());
         }
         this.occupants.put(occupant.getFqn(), occupant);
+    }
+
+    /**
+     * Adds an occupant to the room
+     * @param occupant
+     * @throws ItemNotFoundException
+     */
+    protected void removeOccupant(Occupant occupant) throws ItemExistsException{
+        if (!this.occupants.containsKey(occupant.getFqn())){
+            System.out.println("Occupant " + occupant.getFqn() + " is not found in room " + this.getFqn());
+        }
+        this.occupants.remove(occupant.getFqn());
     }
 
 }

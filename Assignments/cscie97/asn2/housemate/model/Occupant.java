@@ -16,6 +16,7 @@ public class Occupant implements ConfigurationItem {
     private HashMap<String, House> houses = new HashMap<String,House>();
     private Room room = null;
     private Fetcher fetcher = new StandardFetcher();
+    private Boolean isActive = true;
 
     public Occupant(String id, String name, String type){
         this.id = id.replace(" ", "_").replace(".", "_");
@@ -49,6 +50,7 @@ public class Occupant implements ConfigurationItem {
         newState.add(getFqn() + " has_id " + this.id);
         newState.add(getFqn() + " has_name " + this.name);
         newState.add(getFqn() + " is_type " + this.type);
+        newState.add(getFqn() + " is_active " + this.isActive);
         if (this.room != null) {
             newState.add(getFqn() + " is_in_room " + this.room.getFqn());
         }
@@ -65,9 +67,22 @@ public class Occupant implements ConfigurationItem {
         return this.name;
     }
 
+    protected Room getRoom() {
+        return room;
+    }
+
     public void setRoom(Room room) {
         this.room = room;
     }
+
+    public void setIsActive(Boolean isActive) {
+        this.isActive = isActive;
+    }
+
+    public Boolean getIsActive() {
+        return this.isActive;
+    }
+
 
     public void addHouse(House house) {
         this.houses.put(house.getFqn(), house);

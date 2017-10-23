@@ -10,7 +10,7 @@ import java.util.List;
  * Very central to the design, each realizing class implements a "getFqn()" method.
  * An FQN (Fully Qualified Name) is a derived identifier that makes an ConfigurationItem unique within the system.
  */
-interface ConfigurationItem {
+public interface ConfigurationItem {
 
     /**
      * Gets unique identifier for a House Mate Model configuration item. (Hosue/Room/Device/DeviceState/Occupant).

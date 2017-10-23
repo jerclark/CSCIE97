@@ -132,6 +132,19 @@ public interface HouseMateModelService {
     public List<String> moveOccupant(String token, String occupantId, String roomFqn) throws ItemExistsException, UnauthorizedException, ItemNotFoundException, ImportException;
 
     /**
+     * Set activty state for an occupant
+     * @param token
+     * @param occupantId
+     * @param activityState
+     * @return
+     * @throws ItemExistsException
+     * @throws UnauthorizedException
+     * @throws ItemNotFoundException
+     * @throws ImportException
+     */
+    public List<String> setOccupantActivity(String token, String occupantId, Boolean activityState) throws ItemExistsException, UnauthorizedException, ItemNotFoundException, ImportException;
+
+    /**
      * Adds the DeviceState (Setting or Measure) at deviceStateFqn to the Device at deviceFqn as a behavior.
      * For example:
      * addFeature(auth_token, “Setting:TargetTemperature”, “House1:Room1:Oven1”)

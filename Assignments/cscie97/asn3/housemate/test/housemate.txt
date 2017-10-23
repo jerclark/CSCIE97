@@ -8,10 +8,36 @@ console CREATE HOUSE AND LIVING ROOM
 define house House1 address 115_Hamlet_St floors 2
 define room LivingRoom house House1 floor 1
 
+console CREATE OCCUPANT
+define occupant JeremyClark name JeremyClark type Adult
+add occupant JeremyClark house House1
+
+console CONFIGURE THERMOSTAT
+define appliance Thermostat type thermostat room House1:LivingRoom
+define measure room_temp type Float
+define setting target_temp type Float
+add feature Measure:room_temp device House1:LivingRoom:Thermostat
+add feature Setting:target_temp device House1:LivingRoom:Thermostat
+set appliance House1:LivingRoom:Thermostat status Measure:room_temp value 60
+set appliance House1:LivingRoom:Thermostat status Setting:target_temp value 60
+
 console CONFIGURE AVA
 define appliance Ava type smartspeaker room House1:LivingRoom
 define measure voice_command type String
+define measure occupant_leaving type String
+define measure occupant_arriving type String
+define measure occupant_count type Integer
+define measure occupant_inactive type String
+define measure occupant_active type String
+define setting voice_response type String
 add feature Measure:voice_command device House1:LivingRoom:Ava
+add feature Measure:occupant_leaving device House1:LivingRoom:Ava
+add feature Measure:occupant_arriving device House1:LivingRoom:Ava
+add feature Measure:occupant_count device House1:LivingRoom:Ava
+add feature Measure:occupant_inactive device House1:LivingRoom:Ava
+add feature Measure:occupant_active device House1:LivingRoom:Ava
+add feature Setting:voice_response device House1:LivingRoom:Ava
+set appliance House1:LivingRoom:Ava status Measure:occupant_count value 1
 
 console CONFIGURE SMART DOOR
 define appliance Door type door room House1:LivingRoom
@@ -24,21 +50,42 @@ console CONFIGURE LIVING ROOM LIGHTS
 define appliance MainLights type lights room House1:LivingRoom
 define appliance Sconces type lights room House1:LivingRoom
 define setting Light_Power type ON|OFF
+define setting Lumens type Integer
 add feature Setting:Light_Power device House1:LivingRoom:MainLights
 add feature Setting:Light_Power device House1:LivingRoom:Sconces
+add feature Setting:Lumens device House1:LivingRoom:MainLights
+add feature Setting:Lumens device House1:LivingRoom:Sconces
 console INIT LIGHTS TO OFF
 set appliance House1:LivingRoom:MainLights status Setting:Light_Power value OFF
 set appliance House1:LivingRoom:Sconces status Setting:Light_Power value OFF
+console INIT LIGHTS TO 400 LUMENS (WILL HAVE NO EFFECT SINCE LIGHTS ARE OFF)
+set appliance House1:LivingRoom:MainLights status Setting:Lumens value 400
+set appliance House1:LivingRoom:Sconces status Setting:Lumens value 400
 
-
+console CONFIGURE LIVING ROOM WINDOWS
+define appliance FrontWindow type window room House1:LivingRoom
+define appliance SideWindow type window room House1:LivingRoom
+define appliance RearWindow type window room House1:LivingRoom
+define setting Window_Position type OPEN|CLOSED|HALF
+add feature Setting:Window_Position device House1:LivingRoom:FrontWindow
+add feature Setting:Window_Position device House1:LivingRoom:SideWindow
+add feature Setting:Window_Position device House1:LivingRoom:RearWindow
+console INIT WINDOW_POSITION TO CLOSED
+set appliance House1:LivingRoom:FrontWindow status Setting:Window_Position value CLOSED
+set appliance House1:LivingRoom:SideWindow status Setting:Window_Position value CLOSED
+set appliance House1:LivingRoom:RearWindow status Setting:Window_Position value CLOSED
 
 console ***********************
 console RULE CREATION
 console ***********************
 
-console CREATE RULE TO OPEN LR DOOR
+console CREATE CONTEXTS
 create context name House1Context type house fqn House1
-create feature_update_command OpenLivingRoomDoor instructions var r = {'targetDeviceScope':'House1:LivingRoom:Door', 'targetDeviceStateFqn':'Setting:door_state', 'targetValue':'OPEN'};r;
+create context name AllContext type all fqn all
+
+
+console CREATE RULE TO OPEN LR DOOR
+create feature_update_command name OpenLivingRoomDoor instructions var r = {'targetDeviceScope':'House1:LivingRoom:Door', 'targetDeviceStateFqn':'Setting:door_state', 'targetValue':'OPEN'};r;
 create rule_predicate name AvaVoiceCommandIsDoorOpen test var r = (context['House1:LivingRoom:Ava:Measure:voice_command'].is_detecting == 'Open_Door'); r;
 create rule LivingRoomOpenDoorRule
 add context House1Context rule LivingRoomOpenDoorRule
@@ -46,7 +93,7 @@ add predicate AvaVoiceCommandIsDoorOpen rule LivingRoomOpenDoorRule
 add command OpenLivingRoomDoor rule LivingRoomOpenDoorRule
 
 console CREATE RULE TO CLOSE LR DOOR
-create feature_update_command CloseLivingRoomDoor instructions var r = {'targetDeviceScope':'House1:LivingRoom:Door', 'targetDeviceStateFqn':'Setting:door_state', 'targetValue':'CLOSED'};r;
+create feature_update_command name CloseLivingRoomDoor instructions var r = {'targetDeviceScope':'House1:LivingRoom:Door', 'targetDeviceStateFqn':'Setting:door_state', 'targetValue':'CLOSED'};r;
 create rule_predicate name AvaVoiceCommandDoorClose test var r = (context['House1:LivingRoom:Ava:Measure:voice_command'].is_detecting == 'Close_Door'); r;
 create rule LivingRoomCloseDoorRule
 add context House1Context rule LivingRoomCloseDoorRule
@@ -54,7 +101,7 @@ add predicate AvaVoiceCommandDoorClose rule LivingRoomCloseDoorRule
 add command CloseLivingRoomDoor rule LivingRoomCloseDoorRule
 
 console CREATE RULE TO TURN ALL LR LIGHTS ON
-create feature_update_command TurnAllLivingRoomLightsOn instructions var r = {'targetDeviceScope':'House1:LivingRoom:', 'targetDeviceStateFqn':'Setting:Light_Power', 'targetValue':'ON'};r;
+create feature_update_command name TurnAllLivingRoomLightsOn instructions var r = {'targetDeviceScope':'House1:LivingRoom:', 'targetDeviceStateFqn':'Setting:Light_Power', 'targetValue':'ON'};r;
 create rule_predicate name AvaVoiceCommandLightsOn test var r = (context['House1:LivingRoom:Ava:Measure:voice_command'].is_detecting == 'Lights_On'); r;
 create rule LivingRoomLightsOn
 add context House1Context rule LivingRoomLightsOn
@@ -62,47 +109,270 @@ add predicate AvaVoiceCommandLightsOn rule LivingRoomLightsOn
 add command TurnAllLivingRoomLightsOn rule LivingRoomLightsOn
 
 console CREATE RULE TO TURN ALL LR LIGHTS OFF
-create feature_update_command TurnAllLivingRoomLightsOff instructions var r = {'targetDeviceScope':'House1:LivingRoom:', 'targetDeviceStateFqn':'Setting:Light_Power', 'targetValue':'OFF'};r;
+create feature_update_command name TurnAllLivingRoomLightsOff instructions var r = {'targetDeviceScope':'House1:LivingRoom:', 'targetDeviceStateFqn':'Setting:Light_Power', 'targetValue':'OFF'};r;
 create rule_predicate name AvaVoiceCommandLightsOff test var r = (context['House1:LivingRoom:Ava:Measure:voice_command'].is_detecting == 'Lights_Off'); r;
 create rule LivingRoomLightsOff
 add context House1Context rule LivingRoomLightsOff
 add predicate AvaVoiceCommandLightsOff rule LivingRoomLightsOff
 add command TurnAllLivingRoomLightsOff rule LivingRoomLightsOff
 
+console CREATE RULE TO INTERPRET GENERIC AVA ROOM-WIDE VOICE COMMAND
+create feature_update_command name PerformGenericVoiceCommand instructions var notifyingObjectFqn = context['notifyingObject'].fqn;var r = {'targetDeviceScope':notifyingObjectFqn.split(":", 2).join(":", 2), 'targetDeviceStateFqn':'Setting:'+context[notifyingObjectFqn].is_detecting.split("_to_")[0], 'targetValue':context[notifyingObjectFqn].is_detecting.split("_to_")[1]};r;
+create rule_predicate name IsAvaGenericVoiceCommand test var r = context[context['notifyingObject'].fqn].is_detecting.indexOf("_to_")!==-1; r;
+create rule GenericVoiceCommand
+add context House1Context rule GenericVoiceCommand
+add predicate IsAvaGenericVoiceCommand rule GenericVoiceCommand
+add command PerformGenericVoiceCommand rule GenericVoiceCommand
+
+console CREATE RULE TO LOCATE OCCUPANT
+create feature_update_command name LocateOccupantResponse instructions var targetDevice = context['notifyingObject'].fqn.split(':',3).join(':',3);var targetOccupant=context[context['notifyingObject'].fqn].is_detecting.split('Where_is_')[1];var targetOccupantFqn='Occupant:' + targetOccupant;var occupantLocation = context['Occupant:'+targetOccupant].is_in_room;var r = {'targetDeviceScope':targetDevice, 'targetDeviceStateFqn':'Setting:voice_response', 'targetValue':targetOccupant + '_is_in_room_' + occupantLocation};r;
+create rule_predicate name IsAvaLocateOccupantRequest test var r = context[context['notifyingObject'].fqn].is_detecting.indexOf("Where_is_")==0; r;
+create rule LocateOccupant
+add context AllContext rule LocateOccupant
+add predicate IsAvaLocateOccupantRequest rule LocateOccupant
+add command LocateOccupantResponse rule LocateOccupant
+
+console CREATE RULE FOR OCCUPANT LEAVING ROOM
+create move_occupant_command name MoveOccupantOutOfRoom instructions var departingOccupant=context[context['notifyingObject'].fqn].is_detecting;var r = {'occupantId':departingOccupant, 'roomFqn':'null'};r;
+create rule OccupantLeavingRoom
+add context AllContext rule OccupantLeavingRoom
+add command MoveOccupantOutOfRoom rule OccupantLeavingRoom
+
+console CREATE RULE FOR OCCUPANT ARRIVING IN ROOM
+create move_occupant_command name AddOccupantToRoom instructions var targetRoom = context['notifyingObject'].fqn.split(':',2).join(':',2);var arrivingOccupant=context[context['notifyingObject'].fqn].is_detecting;var r = {'occupantId':arrivingOccupant, 'roomFqn':targetRoom};r;
+create rule OccupantEnteringRoom
+add context AllContext rule OccupantEnteringRoom
+add command AddOccupantToRoom rule OccupantEnteringRoom
+
+console CREATE RULE FOR EMPTY OCCUPANCY
+create feature_update_command name DecreaseThermostatTo60 instructions var targetThermostat = context['notifyingObject'].fqn.split(':',2).join(':',2) + ":Thermostat";var r = {'targetDeviceScope':targetThermostat, 'targetDeviceStateFqn':'Setting:target_temp', 'targetValue':60.0};r;
+create rule_predicate name IsRoomEmpty test (context[context['notifyingObject'].fqn].is_detecting == 0);
+create rule RoomIsUnoccupied
+add predicate IsRoomEmpty rule RoomIsUnoccupied
+add context AllContext rule RoomIsUnoccupied
+add command DecreaseThermostatTo60 rule RoomIsUnoccupied
+add command TurnAllLivingRoomLightsOff rule RoomIsUnoccupied
+
+console CREATE RULE FOR NON-EMPTY OCCUPANCY
+create feature_update_command name SetThermostatTo70 instructions var targetThermostat = context['notifyingObject'].fqn.split(':',2).join(':',2) + ":Thermostat";var r = {'targetDeviceScope':targetThermostat, 'targetDeviceStateFqn':'Setting:target_temp', 'targetValue':70.0};r;
+create rule_predicate name IsRoomOccupied test (context[context['notifyingObject'].fqn].is_detecting !== 0);
+create rule RoomIsOccupied
+add predicate IsRoomOccupied rule RoomIsOccupied
+add context AllContext rule RoomIsOccupied
+add command SetThermostatTo70 rule RoomIsOccupied
+add command TurnAllLivingRoomLightsOn rule RoomIsOccupied
+
+
+console CREATE OCCUPANT INACTIVE RULE
+create set_occupant_activity_command name SetOccupantInactive instructions var targetOccupant = context[context['notifyingObject'].fqn].is_detecting;var r = {'occupantId':targetOccupant, 'activityState':'false'};r;
+create rule OccupantInactive
+add context AllContext rule OccupantInactive
+add command SetOccupantInactive rule OccupantInactive
+
+console CREATE OCCUPANT ACTIVE RULE
+create set_occupant_activity_command name SetOccupantActive instructions var targetOccupant = context[context['notifyingObject'].fqn].is_detecting;var r = {'occupantId':targetOccupant, 'activityState':'true'};r;
+create rule OccupantActive
+add context AllContext rule OccupantActive
+add command SetOccupantActive rule OccupantActive
+
+console CREATE SINGLE OCCUPANT INACTIVE
+create feature_update_command name SetLumensTo100 instructions var targetRoom = context['notifyingObject'].fqn.split(':',2).join(':',2);var r = {'targetDeviceScope':targetRoom, 'targetDeviceStateFqn':'Setting:Lumens', 'targetValue':100};r;
+create rule_predicate name IsOccupancyCount1 test var targetRoom = context['notifyingObject'].fqn.split(':',2).join(':',2);print(targetRoom);(context[targetRoom].has_occupant_count == 1);
+create rule SingleOccupantInactive
+add predicate IsOccupancyCount1 rule SingleOccupantInactive
+add context AllContext rule SingleOccupantInactive
+add command SetLumensTo100 rule SingleOccupantInactive
+
+
+console *************************
 console SUBSCRIBE RULE TO VOICE COMMAND UPDATES
+console *************************
 subscribe feature House1:LivingRoom:Ava:Measure:voice_command rule LivingRoomOpenDoorRule
 subscribe feature House1:LivingRoom:Ava:Measure:voice_command rule LivingRoomCloseDoorRule
 subscribe feature House1:LivingRoom:Ava:Measure:voice_command rule LivingRoomLightsOff
 subscribe feature House1:LivingRoom:Ava:Measure:voice_command rule LivingRoomLightsOn
+subscribe feature House1:LivingRoom:Ava:Measure:voice_command rule GenericVoiceCommand
+subscribe feature House1:LivingRoom:Ava:Measure:voice_command rule LocateOccupant
+subscribe feature House1:LivingRoom:Ava:Measure:occupant_arriving rule OccupantEnteringRoom
+subscribe feature House1:LivingRoom:Ava:Measure:occupant_leaving rule OccupantLeavingRoom
+subscribe feature House1:LivingRoom:Ava:Measure:occupant_count rule RoomIsUnoccupied
+subscribe feature House1:LivingRoom:Ava:Measure:occupant_count rule RoomIsOccupied
+subscribe feature House1:LivingRoom:Ava:Measure:occupant_inactive rule OccupantInactive
+subscribe feature House1:LivingRoom:Ava:Measure:occupant_inactive rule SingleOccupantInactive
+subscribe feature House1:LivingRoom:Ava:Measure:occupant_active rule OccupantActive
 
 
 
 console ***********************
-console MODEL UPDATES AND COMMAND EXECUTION
+console SYSTEM STATE UPDATES AND RULE EXECUTION
 console ***********************
 
-console SEND OPEN DOOR COMMAND
+console ===================
+console DIRECT COMMAND OPEN DOOR
+console ===================
+
+console DETECT VOICE COMMAND OPEN_DOOR
 set appliance House1:LivingRoom:Ava status Measure:voice_command value Open_Door
 
 console CHECK RESULTS
 show appliance House1:LivingRoom:Door status Setting:door_state
 
-console SEND CLOSE DOOR COMMAND
+console ===================
+console DIRECT COMMAND CLOSE DOOR
+console ===================
+
+console DETECT VOICE COMMAND CLOSE_DOOR
 set appliance House1:LivingRoom:Ava status Measure:voice_command value Close_Door
 
 console CHECK RESULTS
 show appliance House1:LivingRoom:Door status Setting:door_state
 
-console SEND LIGHTS ON COMMAND
+console ===================
+console DIRECT COMMAND LIGHTS ON
+console ===================
+
+console DETECT VOICE COMMAND LIGHTS_ON
 set appliance House1:LivingRoom:Ava status Measure:voice_command value Lights_On
 
 console CHECK RESULTS
 show appliance House1:LivingRoom:MainLights status Setting:Light_Power
 show appliance House1:LivingRoom:Sconces status Setting:Light_Power
 
-console SEND LIGHTS OFF COMMAND
+
+console ===================
+console DIRECT COMMAND LIGHTS OFF
+console ===================
+
+console DETECT VOICE COMMAND LIGHTS_OFF
 set appliance House1:LivingRoom:Ava status Measure:voice_command value Lights_Off
 
 console CHECK RESULTS
 show appliance House1:LivingRoom:MainLights status Setting:Light_Power
 show appliance House1:LivingRoom:Sconces status Setting:Light_Power
+
+console ===================
+console GENERIC VOICE COMMAND OCCUPANT
+console ===================
+
+console DETECT GENERIC VOICE COMMAND LIGHTS_ON
+set appliance House1:LivingRoom:Ava status Measure:voice_command value Light_Power_to_ON
+
+console CHECK RESULTS
+show appliance House1:LivingRoom:MainLights status Setting:Light_Power
+show appliance House1:LivingRoom:Sconces status Setting:Light_Power
+
+console ===================
+console FIND OCCUPANT
+console ===================
+
+console DETECT OCCUPANT LOCATION
+set appliance House1:LivingRoom:Ava status Measure:voice_command value Where_is_JeremyClark
+
+console CHECK RESULTS
+show appliance House1:LivingRoom:Ava status Setting:voice_response
+
+
+console ===================
+console ARRIVING OCCUPANT
+console ===================
+
+console CONFIRM JEREMYCLARK NOT IN LIVING ROOM
+show configuration room House1:LivingRoom
+
+console DETECT OCCUPANT ARRIVING
+set appliance House1:LivingRoom:Ava status Measure:occupant_arriving value JeremyClark
+
+console CONFIRM JEREMYCLARK IS IN LIVING ROOM
+show configuration room House1:LivingRoom
+
+
+console ===================
+console PROCESS NON_EMPTY ROOM
+console ===================
+
+console CHECK CONFIRM THERMOSTAT SET TO 60 AND LIGHTS OFF
+set appliance House1:LivingRoom:Ava status Measure:voice_command value Light_Power_to_OFF
+show appliance House1:LivingRoom:Thermostat status Setting:target_temp
+show appliance House1:LivingRoom:MainLights status Setting:Light_Power
+show appliance House1:LivingRoom:Sconces status Setting:Light_Power
+
+console DETECT CHANGE IN OCCUPANT_COUNT TO 1
+set appliance House1:LivingRoom:Ava status Measure:occupant_count value 1
+
+console CHECK CONFIRM THERMOSTAT SET TO 70 AND LIGHTS ON
+show appliance House1:LivingRoom:Thermostat status Setting:target_temp
+show appliance House1:LivingRoom:MainLights status Setting:Light_Power
+show appliance House1:LivingRoom:Sconces status Setting:Light_Power
+
+
+
+console ===================
+console PROCESS LEAVING OCCUPANT
+console ===================
+
+console CONFIRM JEREMYCLARK IN LIVING ROOM
+show configuration room House1:LivingRoom
+
+console DETECT OCCUPANT LEAVING
+set appliance House1:LivingRoom:Ava status Measure:occupant_leaving value JeremyClark
+
+console CONFIRM JEREMYCLARK NO LONGER IN LIVING ROOM
+show configuration room House1:LivingRoom
+
+
+console ===================
+console PROCESS EMPTY ROOM
+console ===================
+
+console CHECK CONFIRM THERMOSTAT SET TO 70 AND LIGHTS ON
+show appliance House1:LivingRoom:Thermostat status Setting:target_temp
+show appliance House1:LivingRoom:MainLights status Setting:Light_Power
+show appliance House1:LivingRoom:Sconces status Setting:Light_Power
+
+console DETECT EMPTY ROOM
+set appliance House1:LivingRoom:Ava status Measure:occupant_count value 0
+
+console CHECK CONFIRM THERMOSTAT SET TO 60 AND LIGHTS ON
+show appliance House1:LivingRoom:Thermostat status Setting:target_temp
+show appliance House1:LivingRoom:MainLights status Setting:Light_Power
+show appliance House1:LivingRoom:Sconces status Setting:Light_Power
+
+
+console ===================
+console SINGLE OCCUPANT INACTIVE
+console ===================
+
+console MOVE JEREMYCLARK BACK INTO LIVING ROOM
+set appliance House1:LivingRoom:Ava status Measure:occupant_count value 1
+set appliance House1:LivingRoom:Ava status Measure:occupant_arriving value JeremyClark
+
+console CHECK CONFIRM THAT LUMENS ARE SET TO 400
+show appliance House1:LivingRoom:MainLights status Setting:Lumens
+show appliance House1:LivingRoom:Sconces status Setting:Lumens
+
+console CONFIRM JEREMYCLARK IS ACTIVE
+show configuration occupant Occupant:JeremyClark
+
+console CHECK CONFIRM THAT ROOM OCCUPANCY IS 1
+show configuration room House1:LivingRoom
+
+console DETECT INACTIVE OCCUPANT
+set appliance House1:LivingRoom:Ava status Measure:occupant_inactive value JeremyClark
+
+console CHECK CONFIRM LUMENS SET TO 100 (DIM)
+show appliance House1:LivingRoom:MainLights status Setting:Lumens
+show appliance House1:LivingRoom:Sconces status Setting:Lumens
+
+console CHECK JEREMYCLARK IS INACTIVE
+show configuration occupant Occupant:JeremyClark
+
+
+console ===================
+console SET OCCUPANT ACTIVE
+console ===================
+
+console DETECT ACTIVE OCCUPANT
+set appliance House1:LivingRoom:Ava status Measure:occupant_active value JeremyClark
+
+console CHECK JEREMYCLARK IS NOW ACTIVE
+show configuration occupant Occupant:JeremyClark

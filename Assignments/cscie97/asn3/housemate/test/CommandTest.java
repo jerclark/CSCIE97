@@ -51,7 +51,7 @@ public class CommandTest {
         public TestInvoker(){
         }
 
-        public Context commandContext(Context seedContext){
+        public Context commandContext(){
             ConfigItemContext featureContext = new ConfigItemContext(CONFIG_ITEM_TYPE_FEATURE,"House1:LivingRoom:Thermostat:Measure:Temperature");
             return featureContext;
         }
@@ -62,6 +62,25 @@ public class CommandTest {
         try {
             String expected = "Occupant:clarkjj is_in_room House1:LivingRoom";
             Command fuc = new MoveOccupantCommand("var result = {'occupantId':'clarkjj', 'roomFqn':'House1:LivingRoom'}; result;");
+            fuc.execute(new TestInvoker());
+            assertTrue(hmms.getOccupant("1","Occupant:clarkjj").contains(expected));
+        } catch (UnauthorizedException e) {
+            e.printStackTrace();
+        } catch (ItemNotFoundException e) {
+            e.printStackTrace();
+        } catch (QueryEngineException e) {
+            e.printStackTrace();
+        } catch (CommandExecuteException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @Test
+    public void testSetActivityUpdateCommand(){
+        try {
+            String expected = "Occupant:clarkjj is_active true";
+            Command fuc = new SetOccupantActivityCommand("var result = {'occupantId':'clarkjj', 'activityState':'true'}; result;");
             fuc.execute(new TestInvoker());
             assertTrue(hmms.getOccupant("1","Occupant:clarkjj").contains(expected));
         } catch (UnauthorizedException e) {
