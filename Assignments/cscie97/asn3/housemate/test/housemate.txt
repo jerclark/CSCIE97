@@ -39,6 +39,22 @@ add feature Measure:occupant_active device House1:LivingRoom:Ava
 add feature Setting:voice_response device House1:LivingRoom:Ava
 set appliance House1:LivingRoom:Ava status Measure:occupant_count value 1
 
+console CONFIGURE SMOKE DETECTOR
+define sensor SmokeDetector type smokedetector room House1:LivingRoom
+define measure smoke_level type Float
+add feature Measure:smoke_level device House1:LivingRoom:SmokeDetector
+set appliance House1:LivingRoom:SmokeDetector status Measure:smoke_level value 0
+
+console CONFIGURE EMERGENCY PHONE
+define appliance EmergencyPhone type phone room House1:LivingRoom
+define setting target_number type Integer
+define setting call_mode type HANGUP|CALL
+add feature Setting:target_number device House1:LivingRoom:EmergencyPhone
+add feature Setting:call_mode device House1:LivingRoom:EmergencyPhone
+set appliance House1:LivingRoom:EmergencyPhone status Setting:target_number value 911
+set appliance House1:LivingRoom:EmergencyPhone status Setting:call_mode value HANGUP
+
+
 console CONFIGURE SMART DOOR
 define appliance Door type door room House1:LivingRoom
 define setting door_state type OPEN|CLOSED
@@ -162,7 +178,6 @@ add context AllContext rule RoomIsOccupied
 add command SetThermostatTo70 rule RoomIsOccupied
 add command TurnAllLivingRoomLightsOn rule RoomIsOccupied
 
-
 console CREATE OCCUPANT INACTIVE RULE
 create set_occupant_activity_command name SetOccupantInactive instructions var targetOccupant = context[context['notifyingObject'].fqn].is_detecting;var r = {'occupantId':targetOccupant, 'activityState':'false'};r;
 create rule OccupantInactive
@@ -175,13 +190,39 @@ create rule OccupantActive
 add context AllContext rule OccupantActive
 add command SetOccupantActive rule OccupantActive
 
-console CREATE SINGLE OCCUPANT INACTIVE
+console CREATE SINGLE OCCUPANT INACTIVE RULE
 create feature_update_command name SetLumensTo100 instructions var targetRoom = context['notifyingObject'].fqn.split(':',2).join(':',2);var r = {'targetDeviceScope':targetRoom, 'targetDeviceStateFqn':'Setting:Lumens', 'targetValue':100};r;
 create rule_predicate name IsOccupancyCount1 test var targetRoom = context['notifyingObject'].fqn.split(':',2).join(':',2);print(targetRoom);(context[targetRoom].has_occupant_count == 1);
 create rule SingleOccupantInactive
 add predicate IsOccupancyCount1 rule SingleOccupantInactive
 add context AllContext rule SingleOccupantInactive
 add command SetLumensTo100 rule SingleOccupantInactive
+
+console CREATE DANGEROUS SMOKE LEVEL RULE
+create feature_update_command name BroadcastFireWarning instructions var r = {'targetDeviceScope':'House1', 'targetDeviceStateFqn':'Setting:voice_response', 'targetValue':'Dangerous Smoke Level Detected. Evacuate!'};r;
+create feature_update_command name TurnAllLightsOnInHouse instructions var r = {'targetDeviceScope':'House1', 'targetDeviceStateFqn':'Setting:Light_Power', 'targetValue':'ON'};r;
+create feature_update_command name IssueEmergencyPhoneCall instructions var r = {'targetDeviceScope':'House1:LivingRoom:EmergencyPhone', 'targetDeviceStateFqn':'Setting:call_mode', 'targetValue':'CALL'};r;
+create rule_predicate name IsHouseOccupied test var targetRoom = context['notifyingObject'].fqn.split(':',2).join(':',2);(context[targetRoom].has_occupant_count > 0);
+create rule_predicate name IsSmokeLevelOver100 test (context[context['notifyingObject'].fqn].is_detecting > 100);
+create rule DangerousSmokeLevel
+add predicate IsHouseOccupied rule DangerousSmokeLevel
+add predicate IsSmokeLevelOver100 rule DangerousSmokeLevel
+add context AllContext rule DangerousSmokeLevel
+add command BroadcastFireWarning rule DangerousSmokeLevel
+add command TurnAllLightsOnInHouse rule DangerousSmokeLevel
+
+console CREATE SMOKE EVAUCUATION ROUTE RULE
+create feature_update_command name BroadcastFireWarning instructions var r = {'targetDeviceScope':'House1', 'targetDeviceStateFqn':'Setting:voice_response', 'targetValue':'Dangerous Smoke Level Detected. Evacuate!'};r;
+create feature_update_command name TurnAllLightsOnInHouse instructions var r = {'targetDeviceScope':'House1', 'targetDeviceStateFqn':'Setting:Light_Power', 'targetValue':'ON'};r;
+create rule_predicate name IsHouseOccupied test var targetRoom = context['notifyingObject'].fqn.split(':',2).join(':',2);(context[targetRoom].has_occupant_count > 0);
+create rule_predicate name IsSmokeLevelOver100 test (context[context['notifyingObject'].fqn].is_detecting > 100);
+create rule DangerousSmokeLevel
+add predicate IsHouseOccupied rule DangerousSmokeLevel
+add predicate IsSmokeLevelOver100 rule DangerousSmokeLevel
+add context AllContext rule DangerousSmokeLevel
+add command BroadcastFireWarning rule DangerousSmokeLevel
+add command TurnAllLightsOnInHouse rule DangerousSmokeLevel
+
 
 
 console *************************
@@ -200,7 +241,7 @@ subscribe feature House1:LivingRoom:Ava:Measure:occupant_count rule RoomIsOccupi
 subscribe feature House1:LivingRoom:Ava:Measure:occupant_inactive rule OccupantInactive
 subscribe feature House1:LivingRoom:Ava:Measure:occupant_inactive rule SingleOccupantInactive
 subscribe feature House1:LivingRoom:Ava:Measure:occupant_active rule OccupantActive
-
+subscribe feature House1:LivingRoom:SmokeDetector:Measure:smoke_level rule DangerousSmokeLevel
 
 
 console ***********************
@@ -376,3 +417,20 @@ set appliance House1:LivingRoom:Ava status Measure:occupant_active value JeremyC
 
 console CHECK JEREMYCLARK IS NOW ACTIVE
 show configuration occupant Occupant:JeremyClark
+
+
+console ===================
+console DANGEROUS SMOKE LEVEL (FIRE) DETECTED
+console ===================
+set appliance House1:LivingRoom:Ava status Measure:voice_command value Light_Power_OFF
+
+console CONFIRM LIGHTS ARE OFF, VOICE RESPONSE IS NOT EVACUATION NOTICE AND EMERGENCY PHONE IS ON HOOK
+show appliance House1:LivingRoom:MainLights
+show appliance House1:LivingRoom:Ava
+show appliance House1:LivingRoom:EmergencyPhone
+
+console DETECT ACTIVE OCCUPANT
+# set sensor House1:LivingRoom:SmokeDetector status Measure:smoke_level value 101
+
+console CHECK - LIGHTS ARE ON, VOICE_RESPONSE IS A WARNING
+# show configuration occupant Occupant:JeremyClark
