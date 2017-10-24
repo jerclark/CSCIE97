@@ -5,7 +5,6 @@ import cscie97.asn1.knowledge.engine.ImportException;
 import cscie97.asn1.knowledge.engine.QueryEngineException;
 import cscie97.asn2.housemate.model.*;
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
-import jdk.nashorn.internal.runtime.ScriptObject;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
@@ -20,7 +19,6 @@ public class MoveOccupantCommand extends ConfigItemCommand implements Command {
     public String getCommandId(){
 	    return _commandString;
     }
-
 
 	public void execute(Invoker i) throws CommandExecuteException {
         HouseMateModelService hmms = HouseMateModelServiceImpl.getInstance();

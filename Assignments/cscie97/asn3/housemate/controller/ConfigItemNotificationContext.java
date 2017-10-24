@@ -1,8 +1,11 @@
 package cscie97.asn3.housemate.controller;
 
+import com.sun.deploy.util.StringUtils;
+import com.sun.tools.javac.util.ArrayUtils;
 import cscie97.asn1.knowledge.engine.QueryEngineException;
 import cscie97.asn2.housemate.model.*;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,33 +25,18 @@ public class ConfigItemNotificationContext implements Context, ConfigItemContext
 
     public Map<String, Map<String, String>> serialize(){
         Map<String,Map<String,String>> result = new HashMap<String,Map<String,String>>();
-        Map<String, String> fqnPair = new HashMap<String, String>();
 
-//
-//        Map<String, String> roomFqnPair = new HashMap<String, String>();
-//        houseFqnPair.put("roomFqn", null);
-//
-//        Map<String, String> deviceFqnPair = new HashMap<String, String>();
-//        houseFqnPair.put("deviceFqn", null);
-//
-//        Class notfiyingConfigItemClass = _notifyingObject.getClass();
-//
-//            try {
-//                if (notfiyingConfigItemClass.getName().contentEquals("Feature")) {
-//                    hmms.getFeature("1", _notifyingObject.getFqn());
-//                    houseFqnPair.put("houseFqn", _.notifyingObject.getFqn().split())
-//                }
-//            } catch (UnauthorizedException e) {
-//                e.printStackTrace();
-//            } catch (ItemNotFoundException e) {
-//                e.printStackTrace();
-//            } catch (QueryEngineException e) {
-//                e.printStackTrace();
-//            }
-//        }
+        //Get the notifiying object FQN
+        Map<String, String> fqnPairs = new HashMap<String, String>();
+        fqnPairs.put("fqn", _notifyingObject.getFqn());
 
-        fqnPair.put("fqn", _notifyingObject.getFqn());
-        result.put("notifyingObject", fqnPair);
+        //Get the notifiying object ROOM FQN
+        Map<String, String> roomFqnPair = new HashMap<String, String>();
+        String[] roomFqnParts = Arrays.copyOfRange(_notifyingObject.getFqn().split(":"), 0, 2);
+        String roomFqn = StringUtils.join(Arrays.asList(roomFqnParts), ":");
+        fqnPairs.put("roomFqn", roomFqn);
+
+        result.put("notifyingObject", fqnPairs);
         return result;
     }
 

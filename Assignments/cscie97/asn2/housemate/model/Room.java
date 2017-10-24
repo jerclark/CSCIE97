@@ -11,6 +11,7 @@ public class Room implements ConfigurationItem {
 
     private String name;
     private String floor;
+    private String windowCount;
     private HashMap<String, Device> devices = new HashMap<String, Device>();
     private HashMap<String, Occupant> occupants = new HashMap<String, Occupant>();
     private House house;
@@ -22,10 +23,11 @@ public class Room implements ConfigurationItem {
      * @param floor
      * @param house
      */
-    public Room(String name, String floor, House house) {
+    public Room(String name, String floor, String windowCount, House house) {
         this.name = name.replace(" ", "_");
         this.floor = floor;
         this.house = house;
+        this.windowCount = windowCount;
     }
 
     @Override
@@ -62,6 +64,7 @@ public class Room implements ConfigurationItem {
         ArrayList<String> updatedState = new ArrayList<String>();;
         updatedState.add(getFqn() + " has_name " + this.name);
         updatedState.add(getFqn() + " is_on_floor " + this.floor);
+        updatedState.add(getFqn() + " has_window_count " + this.windowCount);
         Consumer<Device> getDeviceTriple = (device) -> {
             updatedState.add(getFqn() + " has_device " + device.getName());
         };
@@ -85,6 +88,9 @@ public class Room implements ConfigurationItem {
         return this.name;
     }
 
+    protected String getWindwoCount(){
+        return this.windowCount;
+    }
 
     /**
      * Adds a device to the room

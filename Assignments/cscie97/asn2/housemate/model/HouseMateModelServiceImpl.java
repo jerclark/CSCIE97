@@ -96,7 +96,7 @@ public class HouseMateModelServiceImpl implements HouseMateModelService {
         return newSetting.getState();
     }
 
-    public List<String> createRoom(String token, String houseFqn, String roomName, String floor) throws ItemExistsException, UnauthorizedException, ItemNotFoundException, QueryEngineException {
+    public List<String> createRoom(String token, String houseFqn, String roomName, String floor, String windowCount) throws ItemExistsException, UnauthorizedException, ItemNotFoundException, QueryEngineException {
 
         //Authorize
         if (!token.contentEquals(VALID_TOKEN)){
@@ -108,7 +108,7 @@ public class HouseMateModelServiceImpl implements HouseMateModelService {
             throw new ItemNotFoundException(houseFqn);
         }
         House targetHouse = (House)configMap.get(houseFqn);
-        Room newRoom = targetHouse.addRoom(roomName, floor);
+        Room newRoom = targetHouse.addRoom(roomName, floor, windowCount);
         try {
             targetHouse.saveState();
         }catch(ImportException ie){
@@ -233,7 +233,6 @@ public class HouseMateModelServiceImpl implements HouseMateModelService {
         return occupant.getState();
 
     }
-
 
     public List<String> createDevice(String token, String roomFqn, String deviceName, String deviceTypeName) throws ItemExistsException, UnauthorizedException, ItemNotFoundException, QueryEngineException {
 

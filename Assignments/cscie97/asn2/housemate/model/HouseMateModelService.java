@@ -40,7 +40,7 @@ public interface HouseMateModelService {
      * @throws ItemNotFoundException
      * @throws QueryEngineException
      */
-    public List<String> createRoom(String token, String houseFqn, String roomName, String floor) throws ItemExistsException, UnauthorizedException, ItemNotFoundException, QueryEngineException;
+    public List<String> createRoom(String token, String houseFqn, String roomName, String floor, String windowCount) throws ItemExistsException, UnauthorizedException, ItemNotFoundException, QueryEngineException;
 
     /**
      * Adds a mesure to the system

@@ -90,11 +90,12 @@ public class House implements ConfigurationItem {
      *
      * @param roomName
      * @param floor
+     * @param windowCount
      * @return
      * @throws ItemExistsException
      */
-    protected Room addRoom(String roomName, String floor) throws ItemExistsException{
-        Room newRoom = new Room(roomName, floor, this);
+    protected Room addRoom(String roomName, String floor, String windowCount) throws ItemExistsException{
+        Room newRoom = new Room(roomName, floor, windowCount, this);
         if (this.rooms.containsKey(newRoom.getFqn())){
             throw new ItemExistsException(newRoom.getFqn(), newRoom);
         }

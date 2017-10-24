@@ -26,7 +26,7 @@ public class TestBootstrapper {
 
         try {
             hmms.createHouse("1", "House1", "123TerdSt.", "3");
-            hmms.createRoom("1", "House1", "LivingRoom", "1");
+            hmms.createRoom("1", "House1", "LivingRoom", "1", "1");
             hmms.createDevice("1", "House1:LivingRoom", "Thermostat", "Thermostat");
             hmms.createMeasure("1", "Temperature", "Float");
             hmms.createSetting("1", "TargetTemp", "Float");

@@ -174,10 +174,10 @@ public class CommandProcessor {
                     }
 
                     //Define room
-                    Pattern defineRoom = Pattern.compile("define room (.*) house (.*) floor (\\d)");
+                    Pattern defineRoom = Pattern.compile("define room (.*) house (.*) floor (\\d) window_count (\\d)");
                     m = defineRoom.matcher(trimmedCommand);
                     if (m.matches()) {
-                        List<String> result = service.createRoom("1", m.group(2), m.group(1), m.group(3));
+                        List<String> result = service.createRoom("1", m.group(2), m.group(1), m.group(3), m.group(4));
                         System.out.println(result.stream().collect(Collectors.joining("\n")));
                         continue;
                     }
