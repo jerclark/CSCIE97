@@ -1,0 +1,109 @@
+Executing Script file: '/Users/jerclark/Dropbox/Harvard Extension/CSCIE-97/Assignments/out/production/CSCIE-97/cscie97/asn3/housemate/test/controller_exceptions.txt'
+CONSOLE: EXCEPTIONS
+
+CONSOLE: ***********************
+CONSOLE: ***********************
+CONSOLE: MODEL SETUP
+CONSOLE: ***********************
+CONSOLE: ***********************
+
+CONSOLE: CREATE HOUSE AND LIVING ROOM
+
+CONSOLE: CREATE OCCUPANT
+
+CONSOLE: CREATE SMART BLINDS
+House1:LivingRoom:WindowBlinds:Setting:blind_position is_set_to INITIAL_VALUE_UNDEFINED
+House1:LivingRoom:WindowBlinds is_of_type WindowBlinds
+House1:LivingRoom:WindowBlinds is_in_room House1:LivingRoom
+House1:LivingRoom:WindowBlinds:Setting:blind_position is_set_to UP
+
+CONSOLE: CREATE SMART TV
+House1:LivingRoom:TV:Setting:media_source is_set_to INITIAL_VALUE_UNDEFINED
+House1:LivingRoom:TV is_of_type TV
+House1:LivingRoom:TV is_in_room House1:LivingRoom
+House1:LivingRoom:TV:Setting:media_source is_set_to CABLE
+
+
+CONSOLE: ***********************
+CONSOLE: ***********************
+CONSOLE: EXCEPTIONS
+CONSOLE: ***********************
+CONSOLE: ***********************
+
+
+cscie97.asn3.housemate.controller.ControllerNamedItemExistsException: Controller Item of type Rule already exists with name: TestRule. Please use another name.
+Created rule: TestRule
+CONSOLE: ATTEMPT TO CREATE AN ALREADY EXISTING RULE
+
+Created predicate: BadPredicate
+Created predicate: GoodPredicate
+Created command: BadFeatureUpdateCommand
+Created command: GoodFeatureUpdateCommand
+cscie97.asn2.housemate.model.ItemNotFoundException: No item found with identifier: House1:LivingRoom:TV:BogusFeature
+cscie97.asn2.housemate.model.ItemNotFoundException: No item found with identifier: NoRULE
+Created context: BadContext
+Created context: GoodContext
+Rule 'TestRule' subscribed to feature: 'House1:LivingRoom:TV:Setting:media_source
+
+
+CONSOLE: SUBSCRIBE RULE TO FEATURE THAT DOESNT EXIST
+
+CONSOLE: SUBSCRIBE NON-EXISTENT RULE TO FEATURE
+
+CONSOLE: PERFORM BAD PREDICATE JS
+Added predicate: 'BadPredicate' to rule: 'TestRule'
+Added context: 'GoodContext' to rule: 'TestRule'
+CONTROLLER: Rule 'TestRule' received update notification from House1:LivingRoom:TV:Setting:media_source
+javax.script.ScriptException: ReferenceError: "bogus" is not defined in <eval> at line number 1
+	at jdk.nashorn.api.scripting.NashornScriptEngine.throwAsScriptException(NashornScriptEngine.java:470)
+	at jdk.nashorn.api.scripting.NashornScriptEngine.evalImpl(NashornScriptEngine.java:454)
+	at jdk.nashorn.api.scripting.NashornScriptEngine.evalImpl(NashornScriptEngine.java:406)
+	at jdk.nashorn.api.scripting.NashornScriptEngine.evalImpl(NashornScriptEngine.java:402)
+	at jdk.nashorn.api.scripting.NashornScriptEngine.eval(NashornScriptEngine.java:155)
+	at javax.script.AbstractScriptEngine.eval(AbstractScriptEngine.java:264)
+	at cscie97.asn3.housemate.controller.PredicateCreator.lambda$createJSPredicate$0(PredicateCreator.java:35)
+	at java.util.function.Predicate.lambda$and$0(Predicate.java:69)
+	at cscie97.asn3.housemate.controller.Rule.match(Rule.java:54)
+	at cscie97.asn3.housemate.controller.Rule.update(Rule.java:33)
+	at java.util.Observable.notifyObservers(Observable.java:159)
+	at java.util.Observable.notifyObservers(Observable.java:115)
+	at cscie97.asn2.housemate.model.Feature.saveState(Feature.java:72)
+	at cscie97.asn2.housemate.model.HouseMateModelServiceImpl.updateFeature(HouseMateModelServiceImpl.java:328)
+	at cscie97.asn2.housemate.model.CommandProcessor.processCommandList(CommandProcessor.java:252)
+	at cscie97.asn2.housemate.model.CommandProcessor.processCommandFile(CommandProcessor.java:66)
+	at cscie97.asn3.housemate.test.TestDriver.main(TestDriver.java:51)
+Caused by: <eval>:1 ReferenceError: "bogus" is not defined
+	at jdk.nashorn.internal.runtime.ECMAErrors.error(ECMAErrors.java:57)
+	at jdk.nashorn.internal.runtime.ECMAErrors.referenceError(ECMAErrors.java:319)
+	at jdk.nashorn.internal.runtime.ECMAErrors.referenceError(ECMAErrors.java:291)
+	at jdk.nashorn.internal.objects.Global.__noSuchProperty__(Global.java:1441)
+	at jdk.nashorn.internal.scripts.Script$\^eval\_.:program(<eval>:1)
+	at jdk.nashorn.internal.runtime.ScriptFunctionData.invoke(ScriptFunctionData.java:637)
+	at jdk.nashorn.internal.runtime.ScriptFunction.invoke(ScriptFunction.java:494)
+	at jdk.nashorn.internal.runtime.ScriptRuntime.apply(ScriptRuntime.java:393)
+	at jdk.nashorn.api.scripting.NashornScriptEngine.evalImpl(NashornScriptEngine.java:449)
+	... 15 more
+java.lang.NullPointerException
+
+CONSOLE: PERFORM BAD COMMAND JS
+Removed predicate: 'BadPredicate' to rule: 'TestRule'
+Added command: 'BadFeatureUpdateCommand' to rule: 'TestRule'
+CONTROLLER: Rule 'TestRule' received update notification from House1:LivingRoom:TV:Setting:media_source
+CONTROLLER: Rule 'TestRule' all predicates pass. Executing commands.
+CONTROLLER: Rule 'TestRule' executing command var r = {};r;
+cscie97.asn3.housemate.controller.CommandExecuteException: There was an issue executing the command: var r = {};r;. The underlying issue was: java.lang.Exception: Feature Update Command JS String doesn't return proper values: targetDeviceScope, targetDeviceStateFqn, targetValue
+House1:LivingRoom:TV is_of_type TV
+House1:LivingRoom:TV is_in_room House1:LivingRoom
+House1:LivingRoom:TV:Setting:media_source is_set_to CABLE
+
+CONSOLE: PERFORM BAD CONTEXT FETCH
+Removed command: 'BadFeatureUpdateCommand' to rule: 'TestRule'
+Added command: 'GoodFeatureUpdateCommand' to rule: 'TestRule'
+Added context: 'BadContext' to rule: 'TestRule'
+CONTROLLER: Rule 'TestRule' received update notification from House1:LivingRoom:TV:Setting:media_source
+CONTROLLER: Rule 'TestRule' all predicates pass. Executing commands.
+CONTROLLER: Rule 'TestRule' executing command var r = {targetDeviceScope:'House1:LivingRoom:WindowBlinds', targetDeviceStateFqn:'Setting:blind_position', targetValue:'DOWN'};r;
+A ContextFetchException was encountered: cscie97.asn3.housemate.controller.ContextFetchException: There was an issue populating the context. The underlying issue was: cscie97.asn2.housemate.model.ItemNotFoundException: No item found with identifier: House1:Den
+Feature Update command failed to update feature because of: java.lang.RuntimeException: cscie97.asn3.housemate.controller.ContextFetchException: There was an issue populating the context. The underlying issue was: cscie97.asn2.housemate.model.ItemNotFoundException: No item found with identifier: House1:Den
+java.lang.RuntimeException: cscie97.asn3.housemate.controller.ContextFetchException: There was an issue populating the context. The underlying issue was: cscie97.asn2.housemate.model.ItemNotFoundException: No item found with identifier: House1:Den
+

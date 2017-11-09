@@ -1,0 +1,98 @@
+Executing Script file: '/Users/jerclark/Dropbox/Harvard Extension/CSCIE-97/Assignments/out/production/CSCIE-97/cscie97/asn3/housemate/test/command_reuse.txt'
+CONSOLE: THEATER MODE
+
+CONSOLE: ***********************
+CONSOLE: ***********************
+CONSOLE: MODEL SETUP
+CONSOLE: ***********************
+CONSOLE: ***********************
+
+CONSOLE: CREATE HOUSE AND LIVING ROOM
+
+CONSOLE: CREATE OCCUPANT
+
+CONSOLE: CREATE SMART BLINDS
+House1:LivingRoom:WindowBlinds:Setting:blind_position is_set_to INITIAL_VALUE_UNDEFINED
+House1:LivingRoom:WindowBlinds is_of_type WindowBlinds
+House1:LivingRoom:WindowBlinds is_in_room House1:LivingRoom
+House1:LivingRoom:WindowBlinds:Setting:blind_position is_set_to UP
+
+CONSOLE: CREATE SMART TV
+House1:LivingRoom:TV:Setting:media_source is_set_to INITIAL_VALUE_UNDEFINED
+House1:LivingRoom:TV is_of_type TV
+House1:LivingRoom:TV is_in_room House1:LivingRoom
+House1:LivingRoom:TV:Setting:media_source is_set_to CABLE
+
+CONSOLE: CREATE CAMERA
+Measure:all_occupants_inactive has_name all_occupants_inactive
+Measure:all_occupants_inactive accepts_values TRUE|FALSE
+House1:LivingRoom:Camera:Measure:all_occupants_inactive is_detecting INITIAL_VALUE_UNDEFINED
+House1:LivingRoom:Camera is_of_type Camera
+House1:LivingRoom:Camera is_in_room House1:LivingRoom
+House1:LivingRoom:Camera:Measure:all_occupants_inactive is_detecting FALSE
+
+CONSOLE: CREATE REUSABLE LIVING ROOM CONTEXT
+Created context: LivingRoomContext
+
+CONSOLE: CREATE REUSABLE DROP BLINDS COMMAND
+Created command: DropBlinds
+
+
+CONSOLE: ***********************
+CONSOLE: ***********************
+CONSOLE: THEATER MODE RULE SETUP
+CONSOLE: ***********************
+CONSOLE: ***********************
+
+CONSOLE: CREATE AND CONFIGURE THE THEATER MODE RULE
+Created predicate: IsTVInMovieMode
+Created rule: TheaterMode
+Added context: 'LivingRoomContext' to rule: 'TheaterMode'
+Added predicate: 'IsTVInMovieMode' to rule: 'TheaterMode'
+Added command: 'DropBlinds' to rule: 'TheaterMode'
+
+CONSOLE: BLINDS ARE UP
+House1:LivingRoom:WindowBlinds:Setting:blind_position is_set_to UP
+
+CONSOLE: SUBSCRIBE RULE TO TV SOURCE MODE
+Rule 'TheaterMode' subscribed to feature: 'House1:LivingRoom:TV:Setting:media_source
+
+CONSOLE: SET THE TV MODE TO MOVIE
+CONTROLLER: Rule 'TheaterMode' received update notification from House1:LivingRoom:TV:Setting:media_source
+CONTROLLER: Predicate '(context['House1:LivingRoom:TV:Setting:media_source'].is_set_to == 'MOVIE');' is true
+CONTROLLER: Rule 'TheaterMode' all predicates pass. Executing commands.
+CONTROLLER: Rule 'TheaterMode' executing command var r = {targetDeviceScope:'House1:LivingRoom:WindowBlinds', targetDeviceStateFqn:'Setting:blind_position', targetValue:'DOWN'};r;
+
+CONSOLE: CONFIRM OVERHEADS ARE OFF NOW, FLOOR LIGHTS ARE ON AND BLINDS ARE DOWN
+House1:LivingRoom:WindowBlinds:Setting:blind_position is_set_to DOWN
+
+
+CONSOLE: ***********************
+CONSOLE: ***********************
+CONSOLE: ALL OCCUPANTS INACTIVE RULE
+CONSOLE: ***********************
+CONSOLE: ***********************
+
+CONSOLE: CREATE AND CONFIGURE THE ALL OCCUPANTS INACTIVE RULE
+Created predicate: AreAllOccupantsInactive
+Created rule: AllOccupantsInactive
+Added predicate: 'AreAllOccupantsInactive' to rule: 'AllOccupantsInactive'
+
+CONSOLE: REUSE LIVING ROOM CONTEXT AND DROP BLINDS RULE
+Added context: 'LivingRoomContext' to rule: 'AllOccupantsInactive'
+Added command: 'DropBlinds' to rule: 'AllOccupantsInactive'
+
+CONSOLE: FORCE BLINDS TO UP AND CHECK STATUS
+House1:LivingRoom:WindowBlinds:Setting:blind_position is_set_to UP
+
+CONSOLE: SUBSCRIBE OCCUPANTS INACTIVE RULE TO CAMERA "ALL_OCCUPANTS_INACTIVE" MEASURE
+Rule 'AllOccupantsInactive' subscribed to feature: 'House1:LivingRoom:Camera:Measure:all_occupants_inactive
+
+CONSOLE: CAMERA IS MEASURING ALL_OCCUPANTS_INACTIVE
+CONTROLLER: Rule 'AllOccupantsInactive' received update notification from House1:LivingRoom:Camera:Measure:all_occupants_inactive
+CONTROLLER: Predicate '(context['House1:LivingRoom:Camera:Measure:all_occupants_inactive'].is_detecting == 'TRUE');' is true
+CONTROLLER: Rule 'AllOccupantsInactive' all predicates pass. Executing commands.
+CONTROLLER: Rule 'AllOccupantsInactive' executing command var r = {targetDeviceScope:'House1:LivingRoom:WindowBlinds', targetDeviceStateFqn:'Setting:blind_position', targetValue:'DOWN'};r;
+
+CONSOLE: CONFIRM BLINDS ARE DOWN AGAIN
+House1:LivingRoom:WindowBlinds:Setting:blind_position is_set_to DOWN

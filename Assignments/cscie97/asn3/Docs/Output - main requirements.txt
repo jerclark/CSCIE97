@@ -1,0 +1,803 @@
+Executing Script file: '/Users/jerclark/Dropbox/Harvard Extension/CSCIE-97/Assignments/out/production/CSCIE-97/cscie97/asn3/housemate/test/housemate.txt'
+CONSOLE: CONTROLLER MAIN TESTS
+
+CONSOLE: ***********************
+CONSOLE: ***********************
+CONSOLE: MODEL SETUP
+CONSOLE: ***********************
+CONSOLE: ***********************
+
+CONSOLE: CREATE HOUSE AND LIVING ROOM
+
+CONSOLE: CREATE OCCUPANT
+
+CONSOLE: CONFIGURE THERMOSTAT
+
+CONSOLE: CONFIGURE LIVING ROOM AVA
+
+CONSOLE: CONFIGURE LIVING ROOM CAMERA
+
+CONSOLE: CONFIGURE SMOKE DETECTOR
+
+CONSOLE: CONFIGURE EMERGENCY PHONE
+
+CONSOLE: CONFIGURE SMART DOOR
+
+CONSOLE: CONFIGURE LIVING ROOM LIGHTS
+CONSOLE: INIT LIGHTS TO OFF
+CONSOLE: INIT LIGHTS TO 400 LUMENS (WILL HAVE NO EFFECT SINCE LIGHTS ARE OFF)
+
+CONSOLE: CONFIGURE LIVING ROOM WINDOWS
+CONSOLE: INIT WINDOW_POSITION TO CLOSED
+
+
+
+
+
+CONSOLE: ***********************
+CONSOLE: ***********************
+CONSOLE: RULES AND COMMANDS
+CONSOLE: ***********************
+CONSOLE: ***********************
+
+CONSOLE: CREATE CONTEXTS
+Created context: House1Context
+Created context: AllContext
+
+
+CONSOLE: ===================
+CONSOLE: DIRECT COMMAND OPEN DOOR
+CONSOLE: ===================
+
+CONSOLE: CREATE RULE TO OPEN LR DOOR
+Created command: OpenLivingRoomDoor
+Created predicate: AvaVoiceCommandIsDoorOpen
+Created rule: LivingRoomOpenDoorRule
+Added context: 'House1Context' to rule: 'LivingRoomOpenDoorRule'
+Added predicate: 'AvaVoiceCommandIsDoorOpen' to rule: 'LivingRoomOpenDoorRule'
+Added command: 'OpenLivingRoomDoor' to rule: 'LivingRoomOpenDoorRule'
+
+Rule 'LivingRoomOpenDoorRule' subscribed to feature: 'House1:LivingRoom:Ava:Measure:voice_command
+
+CONSOLE: DETECT VOICE COMMAND OPEN_DOOR
+CONTROLLER: Rule 'LivingRoomOpenDoorRule' received update notification from House1:LivingRoom:Ava:Measure:voice_command
+CONTROLLER: Predicate 'var r = (context['House1:LivingRoom:Ava:Measure:voice_command'].is_detecting == 'Open_Door'); r;' is true
+CONTROLLER: Rule 'LivingRoomOpenDoorRule' all predicates pass. Executing commands.
+CONTROLLER: Rule 'LivingRoomOpenDoorRule' executing command var r = {'targetDeviceScope':'House1:LivingRoom:Door', 'targetDeviceStateFqn':'Setting:door_state', 'targetValue':'OPEN'};r;
+House1:LivingRoom:Ava is_in_room House1:LivingRoom
+House1:LivingRoom:Ava is_of_type Ava
+House1:LivingRoom:Ava:Measure:voice_command is_detecting Open_Door
+House1:LivingRoom:Ava:Setting:text_to_speech is_set_to INITIAL_VALUE_UNDEFINED
+
+CONSOLE: CHECK RESULTS
+House1:LivingRoom:Door:Setting:door_state is_set_to OPEN
+
+
+CONSOLE: ===================
+CONSOLE: DIRECT COMMAND CLOSE DOOR
+CONSOLE: ===================
+
+CONSOLE: CREATE RULE TO CLOSE LR DOOR
+Created command: CloseLivingRoomDoor
+Created predicate: AvaVoiceCommandDoorClose
+Created rule: LivingRoomCloseDoorRule
+Added context: 'House1Context' to rule: 'LivingRoomCloseDoorRule'
+Added predicate: 'AvaVoiceCommandDoorClose' to rule: 'LivingRoomCloseDoorRule'
+Added command: 'CloseLivingRoomDoor' to rule: 'LivingRoomCloseDoorRule'
+
+Rule 'LivingRoomCloseDoorRule' subscribed to feature: 'House1:LivingRoom:Ava:Measure:voice_command
+
+CONSOLE: DETECT VOICE COMMAND CLOSE_DOOR
+CONTROLLER: Rule 'LivingRoomCloseDoorRule' received update notification from House1:LivingRoom:Ava:Measure:voice_command
+CONTROLLER: Predicate 'var r = (context['House1:LivingRoom:Ava:Measure:voice_command'].is_detecting == 'Close_Door'); r;' is true
+CONTROLLER: Rule 'LivingRoomCloseDoorRule' all predicates pass. Executing commands.
+CONTROLLER: Rule 'LivingRoomCloseDoorRule' executing command var r = {'targetDeviceScope':'House1:LivingRoom:Door', 'targetDeviceStateFqn':'Setting:door_state', 'targetValue':'CLOSED'};r;
+CONTROLLER: Rule 'LivingRoomOpenDoorRule' received update notification from House1:LivingRoom:Ava:Measure:voice_command
+CONTROLLER: Predicate 'var r = (context['House1:LivingRoom:Ava:Measure:voice_command'].is_detecting == 'Open_Door'); r;' is false
+House1:LivingRoom:Ava is_in_room House1:LivingRoom
+House1:LivingRoom:Ava is_of_type Ava
+House1:LivingRoom:Ava:Measure:voice_command is_detecting Close_Door
+House1:LivingRoom:Ava:Setting:text_to_speech is_set_to INITIAL_VALUE_UNDEFINED
+
+CONSOLE: CHECK RESULTS
+House1:LivingRoom:Door:Setting:door_state is_set_to CLOSED
+
+
+
+CONSOLE: ===================
+CONSOLE: DIRECT COMMAND LIGHTS ON
+CONSOLE: ===================
+
+CONSOLE: CREATE RULE TO TURN ALL LR LIGHTS ON
+Created command: TurnAllLivingRoomLightsOn
+Created predicate: AvaVoiceCommandLightsOn
+Created rule: LivingRoomLightsOn
+Added context: 'House1Context' to rule: 'LivingRoomLightsOn'
+Added predicate: 'AvaVoiceCommandLightsOn' to rule: 'LivingRoomLightsOn'
+Added command: 'TurnAllLivingRoomLightsOn' to rule: 'LivingRoomLightsOn'
+
+Rule 'LivingRoomLightsOn' subscribed to feature: 'House1:LivingRoom:Ava:Measure:voice_command
+
+CONSOLE: DETECT VOICE COMMAND LIGHTS_ON
+CONTROLLER: Rule 'LivingRoomLightsOn' received update notification from House1:LivingRoom:Ava:Measure:voice_command
+CONTROLLER: Predicate 'var r = (context['House1:LivingRoom:Ava:Measure:voice_command'].is_detecting == 'Lights_On'); r;' is true
+CONTROLLER: Rule 'LivingRoomLightsOn' all predicates pass. Executing commands.
+CONTROLLER: Rule 'LivingRoomLightsOn' executing command var r = {'targetDeviceScope':'House1:LivingRoom:', 'targetDeviceStateFqn':'Setting:Light_Power', 'targetValue':'ON'};r;
+CONTROLLER: Rule 'LivingRoomCloseDoorRule' received update notification from House1:LivingRoom:Ava:Measure:voice_command
+CONTROLLER: Predicate 'var r = (context['House1:LivingRoom:Ava:Measure:voice_command'].is_detecting == 'Close_Door'); r;' is false
+CONTROLLER: Rule 'LivingRoomOpenDoorRule' received update notification from House1:LivingRoom:Ava:Measure:voice_command
+CONTROLLER: Predicate 'var r = (context['House1:LivingRoom:Ava:Measure:voice_command'].is_detecting == 'Open_Door'); r;' is false
+House1:LivingRoom:Ava is_in_room House1:LivingRoom
+House1:LivingRoom:Ava is_of_type Ava
+House1:LivingRoom:Ava:Measure:voice_command is_detecting Lights_On
+House1:LivingRoom:Ava:Setting:text_to_speech is_set_to INITIAL_VALUE_UNDEFINED
+
+CONSOLE: CHECK RESULTS
+House1:LivingRoom:MainLights:Setting:Light_Power is_set_to ON
+House1:LivingRoom:Sconces:Setting:Light_Power is_set_to ON
+
+
+
+CONSOLE: ===================
+CONSOLE: DIRECT COMMAND LIGHTS OFF
+CONSOLE: ===================
+
+CONSOLE: CREATE RULE TO TURN ALL LR LIGHTS OFF
+Created command: TurnAllLivingRoomLightsOff
+Created predicate: AvaVoiceCommandLightsOff
+Created rule: LivingRoomLightsOff
+Added context: 'House1Context' to rule: 'LivingRoomLightsOff'
+Added predicate: 'AvaVoiceCommandLightsOff' to rule: 'LivingRoomLightsOff'
+Added command: 'TurnAllLivingRoomLightsOff' to rule: 'LivingRoomLightsOff'
+
+Rule 'LivingRoomLightsOff' subscribed to feature: 'House1:LivingRoom:Ava:Measure:voice_command
+
+CONSOLE: DETECT VOICE COMMAND LIGHTS_OFF
+CONTROLLER: Rule 'LivingRoomLightsOff' received update notification from House1:LivingRoom:Ava:Measure:voice_command
+CONTROLLER: Predicate 'var r = (context['House1:LivingRoom:Ava:Measure:voice_command'].is_detecting == 'Lights_Off'); r;' is true
+CONTROLLER: Rule 'LivingRoomLightsOff' all predicates pass. Executing commands.
+CONTROLLER: Rule 'LivingRoomLightsOff' executing command var r = {'targetDeviceScope':'House1:LivingRoom:', 'targetDeviceStateFqn':'Setting:Light_Power', 'targetValue':'OFF'};r;
+CONTROLLER: Rule 'LivingRoomLightsOn' received update notification from House1:LivingRoom:Ava:Measure:voice_command
+CONTROLLER: Predicate 'var r = (context['House1:LivingRoom:Ava:Measure:voice_command'].is_detecting == 'Lights_On'); r;' is false
+CONTROLLER: Rule 'LivingRoomCloseDoorRule' received update notification from House1:LivingRoom:Ava:Measure:voice_command
+CONTROLLER: Predicate 'var r = (context['House1:LivingRoom:Ava:Measure:voice_command'].is_detecting == 'Close_Door'); r;' is false
+CONTROLLER: Rule 'LivingRoomOpenDoorRule' received update notification from House1:LivingRoom:Ava:Measure:voice_command
+CONTROLLER: Predicate 'var r = (context['House1:LivingRoom:Ava:Measure:voice_command'].is_detecting == 'Open_Door'); r;' is false
+House1:LivingRoom:Ava is_in_room House1:LivingRoom
+House1:LivingRoom:Ava is_of_type Ava
+House1:LivingRoom:Ava:Measure:voice_command is_detecting Lights_Off
+House1:LivingRoom:Ava:Setting:text_to_speech is_set_to INITIAL_VALUE_UNDEFINED
+
+CONSOLE: CHECK RESULTS
+House1:LivingRoom:MainLights:Setting:Light_Power is_set_to OFF
+House1:LivingRoom:Sconces:Setting:Light_Power is_set_to OFF
+
+
+
+CONSOLE: ===================
+CONSOLE: GENERIC VOICE COMMAND OCCUPANT
+CONSOLE: ===================
+
+CONSOLE: CREATE RULE TO INTERPRET GENERIC AVA ROOM-WIDE VOICE COMMAND
+Created command: PerformGenericVoiceCommand
+Created predicate: IsAvaGenericVoiceCommand
+Created rule: GenericVoiceCommand
+Added context: 'House1Context' to rule: 'GenericVoiceCommand'
+Added predicate: 'IsAvaGenericVoiceCommand' to rule: 'GenericVoiceCommand'
+Added command: 'PerformGenericVoiceCommand' to rule: 'GenericVoiceCommand'
+
+Rule 'GenericVoiceCommand' subscribed to feature: 'House1:LivingRoom:Ava:Measure:voice_command
+
+CONSOLE: DETECT GENERIC VOICE COMMAND LIGHTS_ON
+CONTROLLER: Rule 'GenericVoiceCommand' received update notification from House1:LivingRoom:Ava:Measure:voice_command
+CONTROLLER: Predicate 'var r = context[context['notifyingObject'].fqn].is_detecting.indexOf("_to_")!==-1; r;' is true
+CONTROLLER: Rule 'GenericVoiceCommand' all predicates pass. Executing commands.
+CONTROLLER: Rule 'GenericVoiceCommand' executing command var notifyingObjectFqn = context['notifyingObject'].fqn;var r = {'targetDeviceScope':notifyingObjectFqn.split(":", 2).join(":", 2), 'targetDeviceStateFqn':'Setting:'+context[notifyingObjectFqn].is_detecting.split("_to_")[0], 'targetValue':context[notifyingObjectFqn].is_detecting.split("_to_")[1]};r;
+CONTROLLER: Rule 'LivingRoomLightsOff' received update notification from House1:LivingRoom:Ava:Measure:voice_command
+CONTROLLER: Predicate 'var r = (context['House1:LivingRoom:Ava:Measure:voice_command'].is_detecting == 'Lights_Off'); r;' is false
+CONTROLLER: Rule 'LivingRoomLightsOn' received update notification from House1:LivingRoom:Ava:Measure:voice_command
+CONTROLLER: Predicate 'var r = (context['House1:LivingRoom:Ava:Measure:voice_command'].is_detecting == 'Lights_On'); r;' is false
+CONTROLLER: Rule 'LivingRoomCloseDoorRule' received update notification from House1:LivingRoom:Ava:Measure:voice_command
+CONTROLLER: Predicate 'var r = (context['House1:LivingRoom:Ava:Measure:voice_command'].is_detecting == 'Close_Door'); r;' is false
+CONTROLLER: Rule 'LivingRoomOpenDoorRule' received update notification from House1:LivingRoom:Ava:Measure:voice_command
+CONTROLLER: Predicate 'var r = (context['House1:LivingRoom:Ava:Measure:voice_command'].is_detecting == 'Open_Door'); r;' is false
+House1:LivingRoom:Ava is_in_room House1:LivingRoom
+House1:LivingRoom:Ava is_of_type Ava
+House1:LivingRoom:Ava:Measure:voice_command is_detecting Light_Power_to_ON
+House1:LivingRoom:Ava:Setting:text_to_speech is_set_to INITIAL_VALUE_UNDEFINED
+
+CONSOLE: CHECK RESULTS
+House1:LivingRoom:MainLights:Setting:Light_Power is_set_to ON
+House1:LivingRoom:Sconces:Setting:Light_Power is_set_to ON
+
+
+
+CONSOLE: ===================
+CONSOLE: FIND OCCUPANT
+CONSOLE: ===================
+
+CONSOLE: CREATE RULE TO LOCATE OCCUPANT
+Created command: LocateOccupantResponse
+Created predicate: IsAvaLocateOccupantRequest
+Created rule: LocateOccupant
+Added context: 'AllContext' to rule: 'LocateOccupant'
+Added predicate: 'IsAvaLocateOccupantRequest' to rule: 'LocateOccupant'
+Added command: 'LocateOccupantResponse' to rule: 'LocateOccupant'
+
+Rule 'LocateOccupant' subscribed to feature: 'House1:LivingRoom:Ava:Measure:voice_command
+
+CONSOLE: DETECT OCCUPANT LOCATION
+CONTROLLER: Rule 'LocateOccupant' received update notification from House1:LivingRoom:Ava:Measure:voice_command
+CONTROLLER: Predicate 'var r = context[context['notifyingObject'].fqn].is_detecting.indexOf("Where_is_")==0; r;' is true
+CONTROLLER: Rule 'LocateOccupant' all predicates pass. Executing commands.
+CONTROLLER: Rule 'LocateOccupant' executing command var targetDevice = context['notifyingObject'].fqn.split(':',3).join(':',3);var targetOccupant=context[context['notifyingObject'].fqn].is_detecting.split('Where_is_')[1];var targetOccupantFqn='Occupant:' + targetOccupant;var occupantLocation = context['Occupant:'+targetOccupant].is_in_room;var r = {'targetDeviceScope':targetDevice, 'targetDeviceStateFqn':'Setting:text_to_speech', 'targetValue':targetOccupant + '_is_in_room_' + occupantLocation};r;
+CONTROLLER: Rule 'GenericVoiceCommand' received update notification from House1:LivingRoom:Ava:Measure:voice_command
+CONTROLLER: Predicate 'var r = context[context['notifyingObject'].fqn].is_detecting.indexOf("_to_")!==-1; r;' is false
+CONTROLLER: Rule 'LivingRoomLightsOff' received update notification from House1:LivingRoom:Ava:Measure:voice_command
+CONTROLLER: Predicate 'var r = (context['House1:LivingRoom:Ava:Measure:voice_command'].is_detecting == 'Lights_Off'); r;' is false
+CONTROLLER: Rule 'LivingRoomLightsOn' received update notification from House1:LivingRoom:Ava:Measure:voice_command
+CONTROLLER: Predicate 'var r = (context['House1:LivingRoom:Ava:Measure:voice_command'].is_detecting == 'Lights_On'); r;' is false
+CONTROLLER: Rule 'LivingRoomCloseDoorRule' received update notification from House1:LivingRoom:Ava:Measure:voice_command
+CONTROLLER: Predicate 'var r = (context['House1:LivingRoom:Ava:Measure:voice_command'].is_detecting == 'Close_Door'); r;' is false
+CONTROLLER: Rule 'LivingRoomOpenDoorRule' received update notification from House1:LivingRoom:Ava:Measure:voice_command
+CONTROLLER: Predicate 'var r = (context['House1:LivingRoom:Ava:Measure:voice_command'].is_detecting == 'Open_Door'); r;' is false
+House1:LivingRoom:Ava is_in_room House1:LivingRoom
+House1:LivingRoom:Ava is_of_type Ava
+House1:LivingRoom:Ava:Measure:voice_command is_detecting Where_is_JeremyClark
+House1:LivingRoom:Ava:Setting:text_to_speech is_set_to JeremyClark_is_in_room_null
+
+CONSOLE: CHECK RESULTS
+House1:LivingRoom:Ava:Setting:text_to_speech is_set_to JeremyClark_is_in_room_null
+
+
+
+CONSOLE: ===================
+CONSOLE: ARRIVING OCCUPANT
+CONSOLE: ===================
+
+CONSOLE: CREATE RULE FOR OCCUPANT ARRIVING IN ROOM
+Created command: AddOccupantToRoom
+Created rule: OccupantEnteringRoom
+Added context: 'AllContext' to rule: 'OccupantEnteringRoom'
+Added command: 'AddOccupantToRoom' to rule: 'OccupantEnteringRoom'
+
+Rule 'OccupantEnteringRoom' subscribed to feature: 'House1:LivingRoom:Camera:Measure:occupant_arriving
+
+CONSOLE: CREATE RULE FOR NON-EMPTY OCCUPANCY
+Created command: SetThermostatTo70
+Created predicate: IsRoomOccupied
+Created rule: RoomIsOccupied
+Added predicate: 'IsRoomOccupied' to rule: 'RoomIsOccupied'
+Added context: 'AllContext' to rule: 'RoomIsOccupied'
+Added command: 'SetThermostatTo70' to rule: 'RoomIsOccupied'
+Added command: 'TurnAllLivingRoomLightsOn' to rule: 'RoomIsOccupied'
+
+Rule 'RoomIsOccupied' subscribed to feature: 'House1:LivingRoom:Camera:Measure:occupant_count
+
+CONSOLE: CONFIRM JEREMYCLARK NOT IN LIVING ROOM
+Occupant:JeremyClark has_name JeremyClark
+Occupant:JeremyClark is_type Adult
+Occupant:JeremyClark is_active true
+Occupant:JeremyClark has_id JeremyClark
+Occupant:JeremyClark is_member_of House1
+
+CONSOLE: DETECT OCCUPANT ARRIVING
+CONTROLLER: Rule 'OccupantEnteringRoom' received update notification from House1:LivingRoom:Camera:Measure:occupant_arriving
+CONTROLLER: Rule 'OccupantEnteringRoom' all predicates pass. Executing commands.
+CONTROLLER: Rule 'OccupantEnteringRoom' executing command var targetRoom = context['notifyingObject'].fqn.split(':',2).join(':',2);var arrivingOccupant=context[context['notifyingObject'].fqn].is_detecting;var r = {'occupantId':arrivingOccupant, 'roomFqn':targetRoom};r;
+House1:LivingRoom:Camera is_in_room House1:LivingRoom
+House1:LivingRoom:Camera is_of_type Camera
+House1:LivingRoom:Camera:Measure:occupant_leaving is_detecting INITIAL_VALUE_UNDEFINED
+House1:LivingRoom:Camera:Measure:occupant_inactive is_detecting INITIAL_VALUE_UNDEFINED
+House1:LivingRoom:Camera:Measure:occupant_arriving is_detecting JeremyClark
+House1:LivingRoom:Camera:Measure:occupant_active is_detecting INITIAL_VALUE_UNDEFINED
+House1:LivingRoom:Camera:Measure:occupant_count is_detecting 1
+
+CONSOLE: CONFIRM JEREMYCLARK IS IN LIVING ROOM
+Occupant:JeremyClark is_in_room House1:LivingRoom
+Occupant:JeremyClark is_active true
+Occupant:JeremyClark has_id JeremyClark
+Occupant:JeremyClark has_name JeremyClark
+Occupant:JeremyClark is_member_of House1
+Occupant:JeremyClark is_type Adult
+
+CONSOLE: PROCESS NON_EMPTY ROOM
+CONSOLE: CHECK CONFIRM THERMOSTAT SET TO 60 AND LIGHTS OFF
+CONTROLLER: Rule 'LocateOccupant' received update notification from House1:LivingRoom:Ava:Measure:voice_command
+CONTROLLER: Predicate 'var r = context[context['notifyingObject'].fqn].is_detecting.indexOf("Where_is_")==0; r;' is false
+CONTROLLER: Rule 'GenericVoiceCommand' received update notification from House1:LivingRoom:Ava:Measure:voice_command
+CONTROLLER: Predicate 'var r = context[context['notifyingObject'].fqn].is_detecting.indexOf("_to_")!==-1; r;' is true
+CONTROLLER: Rule 'GenericVoiceCommand' all predicates pass. Executing commands.
+CONTROLLER: Rule 'GenericVoiceCommand' executing command var notifyingObjectFqn = context['notifyingObject'].fqn;var r = {'targetDeviceScope':notifyingObjectFqn.split(":", 2).join(":", 2), 'targetDeviceStateFqn':'Setting:'+context[notifyingObjectFqn].is_detecting.split("_to_")[0], 'targetValue':context[notifyingObjectFqn].is_detecting.split("_to_")[1]};r;
+CONTROLLER: Rule 'LivingRoomLightsOff' received update notification from House1:LivingRoom:Ava:Measure:voice_command
+CONTROLLER: Predicate 'var r = (context['House1:LivingRoom:Ava:Measure:voice_command'].is_detecting == 'Lights_Off'); r;' is false
+CONTROLLER: Rule 'LivingRoomLightsOn' received update notification from House1:LivingRoom:Ava:Measure:voice_command
+CONTROLLER: Predicate 'var r = (context['House1:LivingRoom:Ava:Measure:voice_command'].is_detecting == 'Lights_On'); r;' is false
+CONTROLLER: Rule 'LivingRoomCloseDoorRule' received update notification from House1:LivingRoom:Ava:Measure:voice_command
+CONTROLLER: Predicate 'var r = (context['House1:LivingRoom:Ava:Measure:voice_command'].is_detecting == 'Close_Door'); r;' is false
+CONTROLLER: Rule 'LivingRoomOpenDoorRule' received update notification from House1:LivingRoom:Ava:Measure:voice_command
+CONTROLLER: Predicate 'var r = (context['House1:LivingRoom:Ava:Measure:voice_command'].is_detecting == 'Open_Door'); r;' is false
+House1:LivingRoom:Ava is_in_room House1:LivingRoom
+House1:LivingRoom:Ava is_of_type Ava
+House1:LivingRoom:Ava:Measure:voice_command is_detecting Light_Power_to_OFF
+House1:LivingRoom:Ava:Setting:text_to_speech is_set_to JeremyClark_is_in_room_null
+House1:LivingRoom:Thermostat:Setting:target_temp is_set_to 60
+House1:LivingRoom:MainLights:Setting:Light_Power is_set_to OFF
+House1:LivingRoom:Sconces:Setting:Light_Power is_set_to OFF
+
+CONSOLE: DETECT CHANGE IN OCCUPANT_COUNT TO 1
+CONTROLLER: Rule 'RoomIsOccupied' received update notification from House1:LivingRoom:Camera:Measure:occupant_count
+CONTROLLER: Predicate '(context[context['notifyingObject'].fqn].is_detecting !== 0);' is true
+CONTROLLER: Rule 'RoomIsOccupied' all predicates pass. Executing commands.
+CONTROLLER: Rule 'RoomIsOccupied' executing command var r = {'targetDeviceScope':'House1:LivingRoom:', 'targetDeviceStateFqn':'Setting:Light_Power', 'targetValue':'ON'};r;
+CONTROLLER: Rule 'RoomIsOccupied' executing command var targetThermostat = context['notifyingObject'].fqn.split(':',2).join(':',2) + ":Thermostat";var r = {'targetDeviceScope':targetThermostat, 'targetDeviceStateFqn':'Setting:target_temp', 'targetValue':70.0};r;
+House1:LivingRoom:Camera is_in_room House1:LivingRoom
+House1:LivingRoom:Camera is_of_type Camera
+House1:LivingRoom:Camera:Measure:occupant_leaving is_detecting INITIAL_VALUE_UNDEFINED
+House1:LivingRoom:Camera:Measure:occupant_inactive is_detecting INITIAL_VALUE_UNDEFINED
+House1:LivingRoom:Camera:Measure:occupant_arriving is_detecting JeremyClark
+House1:LivingRoom:Camera:Measure:occupant_active is_detecting INITIAL_VALUE_UNDEFINED
+House1:LivingRoom:Camera:Measure:occupant_count is_detecting 1
+
+CONSOLE: CHECK CONFIRM THERMOSTAT SET TO 70 AND LIGHTS ON
+House1:LivingRoom:Thermostat:Setting:target_temp is_set_to 70.0
+House1:LivingRoom:MainLights:Setting:Light_Power is_set_to ON
+House1:LivingRoom:Sconces:Setting:Light_Power is_set_to ON
+
+
+
+CONSOLE: ===================
+CONSOLE: PROCESS LEAVING OCCUPANT
+CONSOLE: ===================
+
+CONSOLE: CREATE RULE FOR OCCUPANT LEAVING ROOM
+Created command: MoveOccupantOutOfRoom
+Created rule: OccupantLeavingRoom
+Added context: 'AllContext' to rule: 'OccupantLeavingRoom'
+Added command: 'MoveOccupantOutOfRoom' to rule: 'OccupantLeavingRoom'
+
+Rule 'OccupantLeavingRoom' subscribed to feature: 'House1:LivingRoom:Camera:Measure:occupant_leaving
+
+CONSOLE: CREATE RULE FOR EMPTY OCCUPANCY
+Created command: DecreaseThermostatTo60
+Created predicate: IsRoomEmpty
+Created rule: RoomIsUnoccupied
+Added predicate: 'IsRoomEmpty' to rule: 'RoomIsUnoccupied'
+Added context: 'AllContext' to rule: 'RoomIsUnoccupied'
+Added command: 'DecreaseThermostatTo60' to rule: 'RoomIsUnoccupied'
+Added command: 'TurnAllLivingRoomLightsOff' to rule: 'RoomIsUnoccupied'
+
+Rule 'RoomIsUnoccupied' subscribed to feature: 'House1:LivingRoom:Camera:Measure:occupant_count
+
+CONSOLE: CONFIRM JEREMYCLARK IN LIVING ROOM
+Occupant:JeremyClark is_in_room House1:LivingRoom
+Occupant:JeremyClark is_active true
+Occupant:JeremyClark has_id JeremyClark
+Occupant:JeremyClark has_name JeremyClark
+Occupant:JeremyClark is_member_of House1
+Occupant:JeremyClark is_type Adult
+
+CONSOLE: DETECT OCCUPANT LEAVING
+CONTROLLER: Rule 'OccupantLeavingRoom' received update notification from House1:LivingRoom:Camera:Measure:occupant_leaving
+CONTROLLER: Rule 'OccupantLeavingRoom' all predicates pass. Executing commands.
+CONTROLLER: Rule 'OccupantLeavingRoom' executing command var departingOccupant=context[context['notifyingObject'].fqn].is_detecting;var r = {'occupantId':departingOccupant, 'roomFqn':'null'};r;
+House1:LivingRoom:Camera is_in_room House1:LivingRoom
+House1:LivingRoom:Camera is_of_type Camera
+House1:LivingRoom:Camera:Measure:occupant_leaving is_detecting JeremyClark
+House1:LivingRoom:Camera:Measure:occupant_inactive is_detecting INITIAL_VALUE_UNDEFINED
+House1:LivingRoom:Camera:Measure:occupant_arriving is_detecting JeremyClark
+House1:LivingRoom:Camera:Measure:occupant_active is_detecting INITIAL_VALUE_UNDEFINED
+House1:LivingRoom:Camera:Measure:occupant_count is_detecting 1
+
+CONSOLE: CONFIRM JEREMYCLARK NO LONGER IN LIVING ROOM
+Occupant:JeremyClark is_active true
+Occupant:JeremyClark is_type Adult
+Occupant:JeremyClark has_id JeremyClark
+Occupant:JeremyClark has_name JeremyClark
+Occupant:JeremyClark is_member_of House1
+
+CONSOLE: PROCESS EMPTY ROOM
+CONSOLE: CHECK CONFIRM THERMOSTAT SET TO 70 AND LIGHTS ON
+House1:LivingRoom:Thermostat:Setting:target_temp is_set_to 70.0
+House1:LivingRoom:MainLights:Setting:Light_Power is_set_to ON
+House1:LivingRoom:Sconces:Setting:Light_Power is_set_to ON
+
+CONSOLE: DETECT EMPTY ROOM
+CONTROLLER: Rule 'RoomIsUnoccupied' received update notification from House1:LivingRoom:Camera:Measure:occupant_count
+CONTROLLER: Predicate '(context[context['notifyingObject'].fqn].is_detecting == 0);' is true
+CONTROLLER: Rule 'RoomIsUnoccupied' all predicates pass. Executing commands.
+CONTROLLER: Rule 'RoomIsUnoccupied' executing command var r = {'targetDeviceScope':'House1:LivingRoom:', 'targetDeviceStateFqn':'Setting:Light_Power', 'targetValue':'OFF'};r;
+CONTROLLER: Rule 'RoomIsUnoccupied' executing command var targetThermostat = context['notifyingObject'].fqn.split(':',2).join(':',2) + ":Thermostat";var r = {'targetDeviceScope':targetThermostat, 'targetDeviceStateFqn':'Setting:target_temp', 'targetValue':60.0};r;
+CONTROLLER: Rule 'RoomIsOccupied' received update notification from House1:LivingRoom:Camera:Measure:occupant_count
+CONTROLLER: Predicate '(context[context['notifyingObject'].fqn].is_detecting !== 0);' is true
+CONTROLLER: Rule 'RoomIsOccupied' all predicates pass. Executing commands.
+CONTROLLER: Rule 'RoomIsOccupied' executing command var r = {'targetDeviceScope':'House1:LivingRoom:', 'targetDeviceStateFqn':'Setting:Light_Power', 'targetValue':'ON'};r;
+CONTROLLER: Rule 'RoomIsOccupied' executing command var targetThermostat = context['notifyingObject'].fqn.split(':',2).join(':',2) + ":Thermostat";var r = {'targetDeviceScope':targetThermostat, 'targetDeviceStateFqn':'Setting:target_temp', 'targetValue':70.0};r;
+House1:LivingRoom:Camera is_in_room House1:LivingRoom
+House1:LivingRoom:Camera is_of_type Camera
+House1:LivingRoom:Camera:Measure:occupant_leaving is_detecting JeremyClark
+House1:LivingRoom:Camera:Measure:occupant_inactive is_detecting INITIAL_VALUE_UNDEFINED
+House1:LivingRoom:Camera:Measure:occupant_arriving is_detecting JeremyClark
+House1:LivingRoom:Camera:Measure:occupant_active is_detecting INITIAL_VALUE_UNDEFINED
+House1:LivingRoom:Camera:Measure:occupant_count is_detecting 0
+
+CONSOLE: CHECK CONFIRM THERMOSTAT SET TO 60 AND LIGHTS ON
+House1:LivingRoom:Thermostat:Setting:target_temp is_set_to 70.0
+House1:LivingRoom:MainLights:Setting:Light_Power is_set_to ON
+House1:LivingRoom:Sconces:Setting:Light_Power is_set_to ON
+
+
+
+
+CONSOLE: ===================
+CONSOLE: SINGLE OCCUPANT INACTIVE
+CONSOLE: ===================
+
+CONSOLE: CREATE OCCUPANT INACTIVE RULE
+Created command: SetOccupantInactive
+Created rule: OccupantInactive
+Added context: 'AllContext' to rule: 'OccupantInactive'
+Added command: 'SetOccupantInactive' to rule: 'OccupantInactive'
+
+Rule 'OccupantInactive' subscribed to feature: 'House1:LivingRoom:Camera:Measure:occupant_inactive
+
+CONSOLE: CREATE SINGLE OCCUPANT INACTIVE RULE
+Created command: SetLumensTo100
+Created predicate: IsOccupancyCount1
+Created rule: SingleOccupantInactive
+Added predicate: 'IsOccupancyCount1' to rule: 'SingleOccupantInactive'
+Added context: 'AllContext' to rule: 'SingleOccupantInactive'
+Added command: 'SetLumensTo100' to rule: 'SingleOccupantInactive'
+
+Rule 'SingleOccupantInactive' subscribed to feature: 'House1:LivingRoom:Camera:Measure:occupant_inactive
+
+CONSOLE: MOVE JEREMYCLARK BACK INTO LIVING ROOM
+CONTROLLER: Rule 'RoomIsUnoccupied' received update notification from House1:LivingRoom:Camera:Measure:occupant_count
+CONTROLLER: Predicate '(context[context['notifyingObject'].fqn].is_detecting == 0);' is false
+CONTROLLER: Rule 'RoomIsOccupied' received update notification from House1:LivingRoom:Camera:Measure:occupant_count
+CONTROLLER: Predicate '(context[context['notifyingObject'].fqn].is_detecting !== 0);' is true
+CONTROLLER: Rule 'RoomIsOccupied' all predicates pass. Executing commands.
+CONTROLLER: Rule 'RoomIsOccupied' executing command var r = {'targetDeviceScope':'House1:LivingRoom:', 'targetDeviceStateFqn':'Setting:Light_Power', 'targetValue':'ON'};r;
+CONTROLLER: Rule 'RoomIsOccupied' executing command var targetThermostat = context['notifyingObject'].fqn.split(':',2).join(':',2) + ":Thermostat";var r = {'targetDeviceScope':targetThermostat, 'targetDeviceStateFqn':'Setting:target_temp', 'targetValue':70.0};r;
+House1:LivingRoom:Camera is_in_room House1:LivingRoom
+House1:LivingRoom:Camera is_of_type Camera
+House1:LivingRoom:Camera:Measure:occupant_leaving is_detecting JeremyClark
+House1:LivingRoom:Camera:Measure:occupant_inactive is_detecting INITIAL_VALUE_UNDEFINED
+House1:LivingRoom:Camera:Measure:occupant_arriving is_detecting JeremyClark
+House1:LivingRoom:Camera:Measure:occupant_active is_detecting INITIAL_VALUE_UNDEFINED
+House1:LivingRoom:Camera:Measure:occupant_count is_detecting 1
+CONTROLLER: Rule 'OccupantEnteringRoom' received update notification from House1:LivingRoom:Camera:Measure:occupant_arriving
+CONTROLLER: Rule 'OccupantEnteringRoom' all predicates pass. Executing commands.
+CONTROLLER: Rule 'OccupantEnteringRoom' executing command var targetRoom = context['notifyingObject'].fqn.split(':',2).join(':',2);var arrivingOccupant=context[context['notifyingObject'].fqn].is_detecting;var r = {'occupantId':arrivingOccupant, 'roomFqn':targetRoom};r;
+House1:LivingRoom:Camera is_in_room House1:LivingRoom
+House1:LivingRoom:Camera is_of_type Camera
+House1:LivingRoom:Camera:Measure:occupant_leaving is_detecting JeremyClark
+House1:LivingRoom:Camera:Measure:occupant_inactive is_detecting INITIAL_VALUE_UNDEFINED
+House1:LivingRoom:Camera:Measure:occupant_arriving is_detecting JeremyClark
+House1:LivingRoom:Camera:Measure:occupant_active is_detecting INITIAL_VALUE_UNDEFINED
+House1:LivingRoom:Camera:Measure:occupant_count is_detecting 1
+
+CONSOLE: CHECK CONFIRM THAT LUMENS ARE SET TO 400
+House1:LivingRoom:MainLights:Setting:Lumens is_set_to 400
+House1:LivingRoom:Sconces:Setting:Lumens is_set_to 400
+
+CONSOLE: CONFIRM JEREMYCLARK IS ACTIVE
+Occupant:JeremyClark is_active true
+Occupant:JeremyClark is_type Adult
+Occupant:JeremyClark is_in_room House1:LivingRoom
+Occupant:JeremyClark is_member_of House1
+Occupant:JeremyClark has_id JeremyClark
+Occupant:JeremyClark has_name JeremyClark
+
+CONSOLE: CHECK CONFIRM THAT ROOM OCCUPANCY IS 1
+House1:LivingRoom has_window_count 1
+House1:LivingRoom has_device RearWindow
+House1:LivingRoom has_device Camera
+House1:LivingRoom is_on_floor 1
+House1:LivingRoom has_occupant_count 1
+House1:LivingRoom has_device MainLights
+House1:LivingRoom has_occupant JeremyClark
+House1:LivingRoom has_device Door
+House1:LivingRoom has_device EmergencyPhone
+House1:LivingRoom has_device Thermostat
+House1:LivingRoom has_device FrontWindow
+House1:LivingRoom has_device Ava
+House1:LivingRoom has_device SmokeDetector
+House1:LivingRoom has_device SideWindow
+House1:LivingRoom has_device Sconces
+House1:LivingRoom has_name LivingRoom
+House1:LivingRoom:SmokeDetector is_of_type SmokeDetector
+House1:LivingRoom:SmokeDetector is_in_room House1:LivingRoom
+House1:LivingRoom:SmokeDetector:Measure:smoke_level is_detecting 0
+House1:LivingRoom:MainLights is_of_type MainLights
+House1:LivingRoom:MainLights is_in_room House1:LivingRoom
+House1:LivingRoom:MainLights:Setting:Lumens is_set_to 400
+House1:LivingRoom:MainLights:Setting:Light_Power is_set_to ON
+House1:LivingRoom:FrontWindow is_of_type FrontWindow
+House1:LivingRoom:FrontWindow is_in_room House1:LivingRoom
+House1:LivingRoom:FrontWindow:Setting:Window_Position is_set_to CLOSED
+House1:LivingRoom:SideWindow is_of_type SideWindow
+House1:LivingRoom:SideWindow is_in_room House1:LivingRoom
+House1:LivingRoom:SideWindow:Setting:Window_Position is_set_to CLOSED
+House1:LivingRoom:Thermostat is_of_type Thermostat
+House1:LivingRoom:Thermostat is_in_room House1:LivingRoom
+House1:LivingRoom:Thermostat:Measure:room_temp is_detecting 60
+House1:LivingRoom:Thermostat:Setting:target_temp is_set_to 70.0
+House1:LivingRoom:Camera is_in_room House1:LivingRoom
+House1:LivingRoom:Camera is_of_type Camera
+House1:LivingRoom:Camera:Measure:occupant_leaving is_detecting JeremyClark
+House1:LivingRoom:Camera:Measure:occupant_inactive is_detecting INITIAL_VALUE_UNDEFINED
+House1:LivingRoom:Camera:Measure:occupant_arriving is_detecting JeremyClark
+House1:LivingRoom:Camera:Measure:occupant_active is_detecting INITIAL_VALUE_UNDEFINED
+House1:LivingRoom:Camera:Measure:occupant_count is_detecting 1
+House1:LivingRoom:RearWindow is_in_room House1:LivingRoom
+House1:LivingRoom:RearWindow is_of_type RearWindow
+House1:LivingRoom:RearWindow:Setting:Window_Position is_set_to CLOSED
+House1:LivingRoom:Sconces is_of_type Sconces
+House1:LivingRoom:Sconces is_in_room House1:LivingRoom
+House1:LivingRoom:Sconces:Setting:Lumens is_set_to 400
+House1:LivingRoom:Sconces:Setting:Light_Power is_set_to ON
+House1:LivingRoom:Ava is_in_room House1:LivingRoom
+House1:LivingRoom:Ava is_of_type Ava
+House1:LivingRoom:Ava:Measure:voice_command is_detecting Light_Power_to_OFF
+House1:LivingRoom:Ava:Setting:text_to_speech is_set_to JeremyClark_is_in_room_null
+House1:LivingRoom:Door is_in_room House1:LivingRoom
+House1:LivingRoom:Door is_of_type Door
+House1:LivingRoom:Door:Setting:door_state is_set_to CLOSED
+House1:LivingRoom:EmergencyPhone is_of_type EmergencyPhone
+House1:LivingRoom:EmergencyPhone is_in_room House1:LivingRoom
+House1:LivingRoom:EmergencyPhone:Setting:call_mode is_set_to HANGUP
+House1:LivingRoom:EmergencyPhone:Setting:target_number is_set_to 911
+
+CONSOLE: DETECT INACTIVE OCCUPANT
+CONTROLLER: Rule 'SingleOccupantInactive' received update notification from House1:LivingRoom:Camera:Measure:occupant_inactive
+House1:LivingRoom
+CONTROLLER: Predicate 'var targetRoom = context['notifyingObject'].fqn.split(':',2).join(':',2);print(targetRoom);(context[targetRoom].has_occupant_count == 1);' is true
+CONTROLLER: Rule 'SingleOccupantInactive' all predicates pass. Executing commands.
+CONTROLLER: Rule 'SingleOccupantInactive' executing command var targetRoom = context['notifyingObject'].fqn.split(':',2).join(':',2);var r = {'targetDeviceScope':targetRoom, 'targetDeviceStateFqn':'Setting:Lumens', 'targetValue':100};r;
+CONTROLLER: Rule 'OccupantInactive' received update notification from House1:LivingRoom:Camera:Measure:occupant_inactive
+CONTROLLER: Rule 'OccupantInactive' all predicates pass. Executing commands.
+CONTROLLER: Rule 'OccupantInactive' executing command var targetOccupant = context[context['notifyingObject'].fqn].is_detecting;var r = {'occupantId':targetOccupant, 'activityState':'false'};r;
+House1:LivingRoom:Camera is_in_room House1:LivingRoom
+House1:LivingRoom:Camera is_of_type Camera
+House1:LivingRoom:Camera:Measure:occupant_leaving is_detecting JeremyClark
+House1:LivingRoom:Camera:Measure:occupant_inactive is_detecting JeremyClark
+House1:LivingRoom:Camera:Measure:occupant_arriving is_detecting JeremyClark
+House1:LivingRoom:Camera:Measure:occupant_active is_detecting INITIAL_VALUE_UNDEFINED
+House1:LivingRoom:Camera:Measure:occupant_count is_detecting 1
+
+CONSOLE: CHECK CONFIRM LUMENS SET TO 100 (DIM)
+House1:LivingRoom:MainLights:Setting:Lumens is_set_to 100
+House1:LivingRoom:Sconces:Setting:Lumens is_set_to 100
+
+CONSOLE: CHECK JEREMYCLARK IS INACTIVE
+Occupant:JeremyClark has_id JeremyClark
+Occupant:JeremyClark is_active false
+Occupant:JeremyClark has_name JeremyClark
+Occupant:JeremyClark is_type Adult
+Occupant:JeremyClark is_in_room House1:LivingRoom
+Occupant:JeremyClark is_member_of House1
+
+
+CONSOLE: ===================
+CONSOLE: SET OCCUPANT ACTIVE
+CONSOLE: ===================
+
+CONSOLE: CREATE OCCUPANT ACTIVE RULE
+Created command: SetOccupantActive
+Created rule: OccupantActive
+Added context: 'AllContext' to rule: 'OccupantActive'
+Added command: 'SetOccupantActive' to rule: 'OccupantActive'
+
+Rule 'OccupantActive' subscribed to feature: 'House1:LivingRoom:Camera:Measure:occupant_active
+
+CONSOLE: DETECT ACTIVE OCCUPANT
+CONTROLLER: Rule 'OccupantActive' received update notification from House1:LivingRoom:Camera:Measure:occupant_active
+CONTROLLER: Rule 'OccupantActive' all predicates pass. Executing commands.
+CONTROLLER: Rule 'OccupantActive' executing command var targetOccupant = context[context['notifyingObject'].fqn].is_detecting;var r = {'occupantId':targetOccupant, 'activityState':'true'};r;
+House1:LivingRoom:Camera is_in_room House1:LivingRoom
+House1:LivingRoom:Camera is_of_type Camera
+House1:LivingRoom:Camera:Measure:occupant_leaving is_detecting JeremyClark
+House1:LivingRoom:Camera:Measure:occupant_inactive is_detecting JeremyClark
+House1:LivingRoom:Camera:Measure:occupant_arriving is_detecting JeremyClark
+House1:LivingRoom:Camera:Measure:occupant_active is_detecting JeremyClark
+House1:LivingRoom:Camera:Measure:occupant_count is_detecting 1
+
+CONSOLE: CHECK JEREMYCLARK IS NOW ACTIVE
+Occupant:JeremyClark has_name JeremyClark
+Occupant:JeremyClark is_in_room House1:LivingRoom
+Occupant:JeremyClark has_id JeremyClark
+Occupant:JeremyClark is_active true
+Occupant:JeremyClark is_member_of House1
+Occupant:JeremyClark is_type Adult
+
+
+
+
+CONSOLE: ===================
+CONSOLE: DANGEROUS SMOKE LEVEL (FIRE) DETECTED - OCCUPANTS IN HOUSE
+CONSOLE: ===================
+
+CONSOLE: CREATE DANGEROUS SMOKE LEVEL (FIRE) RULE
+Created command: BroadcastFireWarning
+Created command: TurnAllLightsOnInHouse
+Created command: IssueEmergencyPhoneCall
+Created predicate: IsHouseOccupied
+Created predicate: IsSmokeLevelOver100
+Created rule: DangerousSmokeLevel
+Added predicate: 'IsHouseOccupied' to rule: 'DangerousSmokeLevel'
+Added predicate: 'IsSmokeLevelOver100' to rule: 'DangerousSmokeLevel'
+Added context: 'AllContext' to rule: 'DangerousSmokeLevel'
+Added command: 'BroadcastFireWarning' to rule: 'DangerousSmokeLevel'
+Added command: 'TurnAllLightsOnInHouse' to rule: 'DangerousSmokeLevel'
+Added command: 'IssueEmergencyPhoneCall' to rule: 'DangerousSmokeLevel'
+
+Rule 'DangerousSmokeLevel' subscribed to feature: 'House1:LivingRoom:SmokeDetector:Measure:smoke_level
+
+CONSOLE: CREATE EVACUATION ROUTE SUGGESTION RULE
+Created command: BroadcastWindowEvacuationRoute
+Created predicate: IsAvaBroadcastingEvacuation
+Created predicate: RoomOnFirstFloor
+Created predicate: RoomHasWindow
+Created rule: EvacuationRouteSuggestion
+Added predicate: 'IsAvaBroadcastingEvacuation' to rule: 'EvacuationRouteSuggestion'
+Added predicate: 'RoomOnFirstFloor' to rule: 'EvacuationRouteSuggestion'
+Added predicate: 'RoomHasWindow' to rule: 'EvacuationRouteSuggestion'
+Added context: 'AllContext' to rule: 'EvacuationRouteSuggestion'
+Added command: 'BroadcastWindowEvacuationRoute' to rule: 'EvacuationRouteSuggestion'
+
+Rule 'EvacuationRouteSuggestion' subscribed to feature: 'House1:LivingRoom:Ava:Setting:text_to_speech
+
+CONSOLE: INIT STATE
+House1:LivingRoom:MainLights is_of_type MainLights
+House1:LivingRoom:MainLights is_in_room House1:LivingRoom
+House1:LivingRoom:MainLights:Setting:Lumens is_set_to 100
+House1:LivingRoom:MainLights:Setting:Light_Power is_set_to OFF
+House1:LivingRoom:Sconces is_of_type Sconces
+House1:LivingRoom:Sconces is_in_room House1:LivingRoom
+House1:LivingRoom:Sconces:Setting:Lumens is_set_to 100
+House1:LivingRoom:Sconces:Setting:Light_Power is_set_to OFF
+CONTROLLER: Rule 'EvacuationRouteSuggestion' received update notification from House1:LivingRoom:Ava:Setting:text_to_speech
+CONTROLLER: Predicate '(context[context['notifyingObject'].fqn].is_set_to.indexOf("Evacuate!") !== -1);' is false
+House1:LivingRoom:Ava is_in_room House1:LivingRoom
+House1:LivingRoom:Ava is_of_type Ava
+House1:LivingRoom:Ava:Measure:voice_command is_detecting Light_Power_to_OFF
+House1:LivingRoom:Ava:Setting:text_to_speech is_set_to Nothing
+
+CONSOLE: CONFIRM LIGHTS ARE OFF, VOICE RESPONSE IS EMPTY AND EMERGENCY PHONE IS ON HOOK
+House1:LivingRoom:MainLights:Setting:Light_Power is_set_to OFF
+House1:LivingRoom:Sconces:Setting:Light_Power is_set_to OFF
+House1:LivingRoom:EmergencyPhone:Setting:call_mode is_set_to HANGUP
+House1:LivingRoom:Ava:Setting:text_to_speech is_set_to Nothing
+
+CONSOLE: DETECT HIGH SMOKE LEVEL > 100
+CONTROLLER: Rule 'DangerousSmokeLevel' received update notification from House1:LivingRoom:SmokeDetector:Measure:smoke_level
+CONTROLLER: Predicate 'var targetRoom = context['notifyingObject'].fqn.split(':',2).join(':',2);(context[targetRoom].has_occupant_count > 0);' is true
+CONTROLLER: Predicate '(context[context['notifyingObject'].fqn].is_detecting > 100);' is true
+CONTROLLER: Rule 'DangerousSmokeLevel' all predicates pass. Executing commands.
+CONTROLLER: Rule 'DangerousSmokeLevel' executing command var r = {'targetDeviceScope':'House1', 'targetDeviceStateFqn':'Setting:Light_Power', 'targetValue':'ON'};r;
+CONTROLLER: Rule 'DangerousSmokeLevel' executing command var r = {'targetDeviceScope':'House1:LivingRoom:EmergencyPhone', 'targetDeviceStateFqn':'Setting:call_mode', 'targetValue':'CALL'};r;
+CONTROLLER: Rule 'DangerousSmokeLevel' executing command var r = {'targetDeviceScope':'House1', 'targetDeviceStateFqn':'Setting:text_to_speech', 'targetValue':'Dangerous_Smoke_Level_Detected._Evacuate!'};r;
+CONTROLLER: Rule 'EvacuationRouteSuggestion' received update notification from House1:LivingRoom:Ava:Setting:text_to_speech
+CONTROLLER: Predicate '(context[context['notifyingObject'].fqn].is_set_to.indexOf("Evacuate!") !== -1);' is true
+CONTROLLER: Predicate 'var targetRoomFqn = context['notifyingObject'].roomFqn;(context[targetRoomFqn].has_window_count > 0);' is true
+CONTROLLER: Predicate 'var targetRoomFqn = context['notifyingObject'].roomFqn;(context[targetRoomFqn].is_on_floor == 1);' is true
+CONTROLLER: Rule 'EvacuationRouteSuggestion' all predicates pass. Executing commands.
+CONTROLLER: Rule 'EvacuationRouteSuggestion' executing command var r = {'targetDeviceScope':'House1', 'targetDeviceStateFqn':'Setting:text_to_speech', 'targetValue':'Exit_House_Immediatly!_If_Door_Is_Blocked_Use_Window!'};r;
+CONTROLLER: Rule 'EvacuationRouteSuggestion' received update notification from House1:LivingRoom:Ava:Setting:text_to_speech
+CONTROLLER: Predicate '(context[context['notifyingObject'].fqn].is_set_to.indexOf("Evacuate!") !== -1);' is false
+House1:LivingRoom:SmokeDetector is_of_type SmokeDetector
+House1:LivingRoom:SmokeDetector is_in_room House1:LivingRoom
+House1:LivingRoom:SmokeDetector:Measure:smoke_level is_detecting 101
+
+CONSOLE: CONFIRM LIGHTS ARE ON, VOICE RESPONSE IS EVACUATION NOTICE AND EMERGENCY PHONE IS IN CALL MODE
+House1:LivingRoom:MainLights:Setting:Light_Power is_set_to ON
+House1:LivingRoom:Sconces:Setting:Light_Power is_set_to ON
+House1:LivingRoom:EmergencyPhone:Setting:call_mode is_set_to CALL
+House1:LivingRoom:Ava:Setting:text_to_speech is_set_to Exit_House_Immediatly!_If_Door_Is_Blocked_Use_Window!
+
+
+
+CONSOLE: ===================
+CONSOLE: OVEN TIMER EXPIRE
+CONSOLE: ===================
+
+CONSOLE: OVEN TIMER EXPIRE RULE
+Created command: NotifyFoodIsReady
+Created command: TurnOvenOff
+Created command: StopOvenTimer
+Created predicate: TimerIsAtZero
+Created predicate: TimerIsInStartMode
+Created rule: OvenTimerExpired
+Added predicate: 'TimerIsAtZero' to rule: 'OvenTimerExpired'
+Added predicate: 'TimerIsInStartMode' to rule: 'OvenTimerExpired'
+Added predicate: 'RoomHasWindow' to rule: 'OvenTimerExpired'
+Added context: 'AllContext' to rule: 'OvenTimerExpired'
+Added command: 'NotifyFoodIsReady' to rule: 'OvenTimerExpired'
+Added command: 'TurnOvenOff' to rule: 'OvenTimerExpired'
+Added command: 'StopOvenTimer' to rule: 'OvenTimerExpired'
+
+Rule 'OvenTimerExpired' subscribed to feature: 'House1:Kitchen:Oven:Measure:timer_value
+
+CONSOLE: INIT STATE
+CONTROLLER: Rule 'EvacuationRouteSuggestion' received update notification from House1:LivingRoom:Ava:Setting:text_to_speech
+CONTROLLER: Predicate '(context[context['notifyingObject'].fqn].is_set_to.indexOf("Evacuate!") !== -1);' is false
+House1:LivingRoom:Ava is_in_room House1:LivingRoom
+House1:LivingRoom:Ava is_of_type Ava
+House1:LivingRoom:Ava:Measure:voice_command is_detecting Light_Power_to_OFF
+House1:LivingRoom:Ava:Setting:text_to_speech is_set_to Nothing
+
+CONSOLE: CONFIRM OVEN IS ON (target_temp != 0) NO TEXT TO SPEECH COMMANDS AND
+House1:Kitchen:Oven:Setting:target_temp is_set_to 350
+House1:LivingRoom:Ava:Setting:text_to_speech is_set_to Nothing
+
+CONSOLE: DETECT OVEN TIMER VALUE TO 0
+CONTROLLER: Rule 'OvenTimerExpired' received update notification from House1:Kitchen:Oven:Measure:timer_value
+CONTROLLER: Predicate '(context['House1:Kitchen:Oven:Measure:timer_value'].is_detecting == 0);' is true
+CONTROLLER: Predicate 'var targetRoomFqn = context['notifyingObject'].roomFqn;(context[targetRoomFqn].has_window_count > 0);' is true
+CONTROLLER: Predicate '(context['House1:Kitchen:Oven:Setting:timer_mode'].is_set_to == 'START');' is true
+CONTROLLER: Rule 'OvenTimerExpired' all predicates pass. Executing commands.
+CONTROLLER: Rule 'OvenTimerExpired' executing command var r = {'targetDeviceScope':'House1', 'targetDeviceStateFqn':'Setting:text_to_speech', 'targetValue':'Food_Is_Ready!'};r;
+CONTROLLER: Rule 'EvacuationRouteSuggestion' received update notification from House1:LivingRoom:Ava:Setting:text_to_speech
+CONTROLLER: Predicate '(context[context['notifyingObject'].fqn].is_set_to.indexOf("Evacuate!") !== -1);' is false
+CONTROLLER: Rule 'OvenTimerExpired' executing command var r = {'targetDeviceScope':'House1:Kitchen:Oven', 'targetDeviceStateFqn':'Setting:timer_mode', 'targetValue':'STOP'};r;
+CONTROLLER: Rule 'OvenTimerExpired' executing command var r = {'targetDeviceScope':'House1:Kitchen:Oven', 'targetDeviceStateFqn':'Setting:target_temp', 'targetValue':'0'};r;
+House1:Kitchen:Oven is_in_room House1:Kitchen
+House1:Kitchen:Oven is_of_type Oven
+House1:Kitchen:Oven:Measure:current_temp is_detecting 350
+House1:Kitchen:Oven:Setting:timer_mode is_set_to STOP
+House1:Kitchen:Oven:Measure:timer_value is_detecting 0
+House1:Kitchen:Oven:Setting:target_temp is_set_to 0
+House1:Kitchen:Oven:Setting:timer_start_value is_set_to 120
+
+CONSOLE: CONFIRM OVEN IS OFF (target_temp == 0) AND AVA SENDING VOICE MESSAGE THAT FOOD IS DONE
+House1:Kitchen:Oven:Setting:target_temp is_set_to 0
+House1:LivingRoom:Ava:Setting:text_to_speech is_set_to Food_Is_Ready!
+
+
+
+CONSOLE: ===================
+CONSOLE: BEER COUNT BELOW THRESHOLD!
+CONSOLE: ===================
+
+CONSOLE: CREATE RULE FOR BEER SUPPLY LOW
+Created command: RequestForBeer
+Created predicate: BeerCountAtThreshold
+Created rule: BeerSupplyLow
+Added predicate: 'BeerCountAtThreshold' to rule: 'BeerSupplyLow'
+Added context: 'AllContext' to rule: 'BeerSupplyLow'
+Added command: 'RequestForBeer' to rule: 'BeerSupplyLow'
+Rule 'BeerSupplyLow' subscribed to feature: 'House1:Kitchen:Refrigerator:Measure:beer_count
+
+CONSOLE: SET BEER COUNT TO 3
+CONTROLLER: Rule 'BeerSupplyLow' received update notification from House1:Kitchen:Refrigerator:Measure:beer_count
+{is_set_to=3}
+CONTROLLER: Predicate 'print(context['House1:Kitchen:Refrigerator:Setting:beer_count_reminder']);(context['House1:Kitchen:Refrigerator:Measure:beer_count'].is_detecting == context['House1:Kitchen:Refrigerator:Setting:beer_count_reminder'].is_set_to);' is true
+CONTROLLER: Rule 'BeerSupplyLow' all predicates pass. Executing commands.
+CONTROLLER: Rule 'BeerSupplyLow' executing command var r = {'targetDeviceScope':'House1', 'targetDeviceStateFqn':'Setting:text_to_speech', 'targetValue':'Beer_Low!_Would_You_Like_To_Order_more!'};r;
+CONTROLLER: Rule 'EvacuationRouteSuggestion' received update notification from House1:LivingRoom:Ava:Setting:text_to_speech
+CONTROLLER: Predicate '(context[context['notifyingObject'].fqn].is_set_to.indexOf("Evacuate!") !== -1);' is false
+House1:Kitchen:Refrigerator is_of_type Refrigerator
+House1:Kitchen:Refrigerator is_in_room House1:Kitchen
+House1:Kitchen:Refrigerator:Measure:beer_count is_detecting 3
+House1:Kitchen:Refrigerator:Setting:need_beer is_set_to NO
+House1:Kitchen:Refrigerator:Setting:beer_count_reminder is_set_to 3
+
+CONSOLE: CONFIRM VOICE NOTIFICATION ASKING IF WANT TO ORDER MORE BEER
+House1:Kitchen:Refrigerator:Measure:beer_count is_detecting 3
+House1:Kitchen:Refrigerator:Setting:need_beer is_set_to NO
+House1:Kitchen:AvaKitchen:Setting:text_to_speech is_set_to Beer_Low!_Would_You_Like_To_Order_more!
+
+CONSOLE: ASK FOR MORE BEER
+Rule 'GenericVoiceCommand' subscribed to feature: 'House1:Kitchen:AvaKitchen:Measure:voice_command
+CONTROLLER: Rule 'GenericVoiceCommand' received update notification from House1:Kitchen:AvaKitchen:Measure:voice_command
+CONTROLLER: Predicate 'var r = context[context['notifyingObject'].fqn].is_detecting.indexOf("_to_")!==-1; r;' is true
+CONTROLLER: Rule 'GenericVoiceCommand' all predicates pass. Executing commands.
+CONTROLLER: Rule 'GenericVoiceCommand' executing command var notifyingObjectFqn = context['notifyingObject'].fqn;var r = {'targetDeviceScope':notifyingObjectFqn.split(":", 2).join(":", 2), 'targetDeviceStateFqn':'Setting:'+context[notifyingObjectFqn].is_detecting.split("_to_")[0], 'targetValue':context[notifyingObjectFqn].is_detecting.split("_to_")[1]};r;
+House1:Kitchen:AvaKitchen is_of_type AvaKitchen
+House1:Kitchen:AvaKitchen is_in_room House1:Kitchen
+House1:Kitchen:AvaKitchen:Measure:voice_command is_detecting need_beer_to_YES
+House1:Kitchen:AvaKitchen:Setting:text_to_speech is_set_to Beer_Low!_Would_You_Like_To_Order_more!
+
+CONSOLE: CONFIRM NEED BEER IS NOW YES (which will trigger a beer order from the smart refrigerator)
+House1:Kitchen:Refrigerator:Setting:need_beer is_set_to YES

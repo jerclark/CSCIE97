@@ -1,0 +1,59 @@
+Executing Script file: '/Users/jerclark/Dropbox/Harvard Extension/CSCIE-97/Assignments/out/production/CSCIE-97/cscie97/asn3/housemate/test/theatermode.txt'
+CONSOLE: THEATER MODE
+
+CONSOLE: ***********************
+CONSOLE: ***********************
+CONSOLE: MODEL SETUP
+CONSOLE: ***********************
+CONSOLE: ***********************
+
+CONSOLE: CREATE HOUSE AND LIVING ROOM
+
+CONSOLE: CREATE SMART TV
+
+CONSOLE: CREATE SMART BLINDS
+
+CONSOLE: CREATE SMART LIGHTS
+
+
+CONSOLE: ***********************
+CONSOLE: ***********************
+CONSOLE: THEATER MODE RULE SETUP
+CONSOLE: ***********************
+CONSOLE: ***********************
+
+CONSOLE: CREATE COMMANDS TO DROP BLINDS, TURN OFF OVERHEADS AND TURN ON FLOOR LIGHTS
+Created command: DropBlinds
+Created command: TurnOffOverheadLights
+Created command: TurnOnFloorLights
+Created predicate: IsTVInMovieMode
+Created context: LivingRoomContext
+
+CONSOLE: CREATE AND CONFIGURE THE THEATER MODE RULE
+Created rule: TheaterMode
+Added context: 'LivingRoomContext' to rule: 'TheaterMode'
+Added predicate: 'IsTVInMovieMode' to rule: 'TheaterMode'
+Added command: 'DropBlinds' to rule: 'TheaterMode'
+Added command: 'TurnOffOverheadLights' to rule: 'TheaterMode'
+Added command: 'TurnOnFloorLights' to rule: 'TheaterMode'
+
+CONSOLE: SUBSCRIBE RULE TO TV SOURCE MODE
+Rule 'TheaterMode' subscribed to feature: 'House1:LivingRoom:TV:Setting:media_source
+
+CONSOLE: CONFIRM OVERHEADS ARE ON, FLOOR LIGHTS ARE OFF AND BLINDS ARE UP
+House1:LivingRoom:OverheadLights:Setting:Light_Power is_set_to ON
+House1:LivingRoom:FloorLights:Setting:Light_Power is_set_to OFF
+House1:LivingRoom:WindowBlinds:Setting:blind_position is_set_to UP
+
+CONSOLE: SET THE TV MODE TO MOVIE
+CONTROLLER: Rule 'TheaterMode' received update notification from House1:LivingRoom:TV:Setting:media_source
+CONTROLLER: Predicate '(context['House1:LivingRoom:TV:Setting:media_source'].is_set_to == 'MOVIE');' is true
+CONTROLLER: Rule 'TheaterMode' all predicates pass. Executing commands.
+CONTROLLER: Rule 'TheaterMode' executing command var r = {targetDeviceScope:'House1:LivingRoom:WindowBlinds', targetDeviceStateFqn:'Setting:blind_position', targetValue:'DOWN'};r;
+CONTROLLER: Rule 'TheaterMode' executing command var r = {targetDeviceScope:'House1:LivingRoom:OverheadLights', targetDeviceStateFqn:'Setting:Light_Power', targetValue:'OFF'};r;
+CONTROLLER: Rule 'TheaterMode' executing command var r = {targetDeviceScope:'House1:LivingRoom:FloorLights', targetDeviceStateFqn:'Setting:Light_Power', targetValue:'ON'};r;
+
+CONSOLE: CONFIRM OVERHEADS ARE OFF NOW, FLOOR LIGHTS ARE ON AND BLINDS ARE DOWN
+House1:LivingRoom:OverheadLights:Setting:Light_Power is_set_to OFF
+House1:LivingRoom:FloorLights:Setting:Light_Power is_set_to ON
+House1:LivingRoom:WindowBlinds:Setting:blind_position is_set_to DOWN
