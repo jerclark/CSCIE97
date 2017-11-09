@@ -1,0 +1,71 @@
+console EXCEPTIONS
+
+console ***********************
+console ***********************
+console MODEL SETUP
+console ***********************
+console ***********************
+
+console CREATE HOUSE AND LIVING ROOM
+define house House1 address 115_Hamlet_St floors 2 silent
+define room LivingRoom house House1 floor 1 window_count 1 silent
+define room Kitchen house House1 floor 1 window_count 2 silent
+
+console CREATE OCCUPANT
+define occupant JeremyClark name JeremyClark type Adult silent
+add occupant JeremyClark house House1 silent
+
+console CREATE SMART BLINDS
+define appliance WindowBlinds type shades room House1:LivingRoom silent
+define setting blind_position type UP|DOWN|HALF silent
+add feature Setting:blind_position device House1:LivingRoom:WindowBlinds
+set appliance House1:LivingRoom:WindowBlinds status Setting:blind_position value UP
+
+console CREATE SMART TV
+define appliance TV type tv room House1:LivingRoom silent
+define setting media_source type MOVIE|CABLE|GAME silent
+add feature Setting:media_source device House1:LivingRoom:TV
+set appliance House1:LivingRoom:TV status Setting:media_source value CABLE
+
+
+console ***********************
+console ***********************
+console EXCEPTIONS
+console ***********************
+console ***********************
+
+
+create rule TestRule
+console ATTEMPT TO CREATE AN ALREADY EXISTING RULE
+create rule TestRule
+
+create rule_predicate name BadPredicate test bogus;
+create rule_predicate name GoodPredicate test true;
+create feature_update_command name BadFeatureUpdateCommand instructions var r = {};r;
+create feature_update_command name GoodFeatureUpdateCommand instructions var r = {targetDeviceScope:'House1:LivingRoom:WindowBlinds', targetDeviceStateFqn:'Setting:blind_position', targetValue:'DOWN'};r;
+create context name BadContext type room fqn House1:Den
+create context name GoodContext type room fqn House1:LivingRoom
+subscribe feature House1:LivingRoom:TV:Setting:media_source rule TestRule
+
+
+console SUBSCRIBE RULE TO FEATURE THAT DOESNT EXIST
+subscribe feature House1:LivingRoom:TV:BogusFeature rule TestRule
+
+console SUBSCRIBE NON-EXISTENT RULE TO FEATURE
+subscribe feature House1:LivingRoom:TV:Setting:media_source rule NoRULE
+
+console PERFORM BAD PREDICATE JS
+add predicate BadPredicate rule TestRule
+add context GoodContext rule TestRule
+set appliance House1:LivingRoom:TV status Setting:media_source value MOVIE
+
+console PERFORM BAD COMMAND JS
+remove predicate BadPredicate rule TestRule
+add command BadFeatureUpdateCommand rule TestRule
+set appliance House1:LivingRoom:TV status Setting:media_source value CABLE
+
+console PERFORM BAD CONTEXT FETCH
+remove command BadFeatureUpdateCommand rule TestRule
+add command GoodFeatureUpdateCommand rule TestRule
+add context BadContext rule TestRule
+set appliance House1:LivingRoom:TV status Setting:media_source value MOVIE

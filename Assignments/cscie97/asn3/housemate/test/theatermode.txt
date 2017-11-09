@@ -1,0 +1,72 @@
+console THEATER MODE
+
+console ***********************
+console ***********************
+console MODEL SETUP
+console ***********************
+console ***********************
+
+console CREATE HOUSE AND LIVING ROOM
+define house House1 address 115_Hamlet_St floors 2 silent
+define room LivingRoom house House1 floor 1 window_count 1 silent
+define room Kitchen house House1 floor 1 window_count 2 silent
+
+console CREATE SMART TV
+define appliance TV type tv room House1:LivingRoom silent
+define setting media_source type MOVIE|CABLE|GAME silent
+add feature Setting:media_source device House1:LivingRoom:TV silent
+set appliance House1:LivingRoom:TV status Setting:media_source value CABLE silent
+
+console CREATE SMART BLINDS
+define appliance WindowBlinds type shades room House1:LivingRoom silent
+define setting blind_position type UP|DOWN|HALF silent
+add feature Setting:blind_position device House1:LivingRoom:WindowBlinds silent
+set appliance House1:LivingRoom:WindowBlinds status Setting:blind_position value UP silent
+
+console CREATE SMART LIGHTS
+define appliance OverheadLights type light room House1:LivingRoom silent
+define appliance FloorLights type light room House1:LivingRoom silent
+define setting Light_Power type ON|OFF silent
+add feature Setting:Light_Power device House1:LivingRoom:OverheadLights silent
+set appliance House1:LivingRoom:OverheadLights status Setting:Light_Power value ON silent
+add feature Setting:Light_Power device House1:LivingRoom:FloorLights silent
+set appliance House1:LivingRoom:FloorLights status Setting:Light_Power value OFF silent
+
+
+console ***********************
+console ***********************
+console THEATER MODE RULE SETUP
+console ***********************
+console ***********************
+
+console CREATE COMMANDS TO DROP BLINDS, TURN OFF OVERHEADS AND TURN ON FLOOR LIGHTS
+create feature_update_command name DropBlinds instructions var r = {targetDeviceScope:'House1:LivingRoom:WindowBlinds', targetDeviceStateFqn:'Setting:blind_position', targetValue:'DOWN'};r;
+create feature_update_command name TurnOffOverheadLights instructions var r = {targetDeviceScope:'House1:LivingRoom:OverheadLights', targetDeviceStateFqn:'Setting:Light_Power', targetValue:'OFF'};r;
+create feature_update_command name TurnOnFloorLights instructions var r = {targetDeviceScope:'House1:LivingRoom:FloorLights', targetDeviceStateFqn:'Setting:Light_Power', targetValue:'ON'};r;
+create rule_predicate name IsTVInMovieMode test (context['House1:LivingRoom:TV:Setting:media_source'].is_set_to == 'MOVIE');
+create context name LivingRoomContext type room fqn House1:LivingRoom
+
+console CREATE AND CONFIGURE THE THEATER MODE RULE
+create rule TheaterMode
+add context LivingRoomContext rule TheaterMode
+add predicate IsTVInMovieMode rule TheaterMode
+add command DropBlinds rule TheaterMode
+add command TurnOffOverheadLights rule TheaterMode
+add command TurnOnFloorLights rule TheaterMode
+
+console SUBSCRIBE RULE TO TV SOURCE MODE
+subscribe feature House1:LivingRoom:TV:Setting:media_source rule TheaterMode
+
+console CONFIRM OVERHEADS ARE ON, FLOOR LIGHTS ARE OFF AND BLINDS ARE UP
+show appliance House1:LivingRoom:OverheadLights status Setting:Light_Power
+show appliance House1:LivingRoom:FloorLights status Setting:Light_Power
+show appliance House1:LivingRoom:WindowBlinds status Setting:blind_position
+
+console SET THE TV MODE TO MOVIE
+set appliance House1:LivingRoom:TV status Setting:media_source value MOVIE silent
+
+console CONFIRM OVERHEADS ARE OFF NOW, FLOOR LIGHTS ARE ON AND BLINDS ARE DOWN
+show appliance House1:LivingRoom:OverheadLights status Setting:Light_Power
+show appliance House1:LivingRoom:FloorLights status Setting:Light_Power
+show appliance House1:LivingRoom:WindowBlinds status Setting:blind_position
+

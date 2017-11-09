@@ -25,13 +25,15 @@ public class TestDriver {
 
     public static void main(String[] args) {
 
+        String scriptFile = "";
+
         if (args.length == 0){
-            System.out.println("Please pass a housemate script file name as a program argument.");
-            return;
+            scriptFile = "housemate.txt";
+        }else{
+            scriptFile = args[0];
         }
 
         //Get the triple file fully qualified path
-        String scriptFile = args[0];
         URL scriptFilePath = cscie97.asn3.housemate.test.TestDriver.class.getResource(scriptFile);
         if (scriptFilePath == null){
             System.out.println("Missing input file: " + scriptFile);

@@ -130,6 +130,15 @@ public class CommandProcessor {
                         continue;
                     }
 
+                    //Check for slient mode
+                    Boolean silentMode = false;
+                    Pattern silent = Pattern.compile("^(.*) silent$");
+                    m = silent.matcher(trimmedCommand);
+                    if (m.matches()) {
+                        silentMode = true;
+                        trimmedCommand = trimmedCommand.substring(0, trimmedCommand.length() - 7);
+                    }
+
                     //Skip comments
                     Pattern comment = Pattern.compile("^# (.*)");
                     m = comment.matcher(trimmedCommand);
@@ -141,7 +150,7 @@ public class CommandProcessor {
                     Pattern consoleMsg = Pattern.compile("console (.*)");
                     m = consoleMsg.matcher(trimmedCommand);
                     if (m.matches()) {
-                        System.out.println("CONSOLE: " + m.group(1));
+                        if (!silentMode) System.out.println("CONSOLE: " + m.group(1));
                         continue;
                     }
 
@@ -151,7 +160,7 @@ public class CommandProcessor {
                     m = createSetting.matcher(trimmedCommand);
                     if (m.matches()) {
                         List<String> result = service.createSetting("1", m.group(1), m.group(2));
-                        System.out.println(result.stream().collect(Collectors.joining("\n")));
+                        if (!silentMode) System.out.println(result.stream().collect(Collectors.joining("\n")));
                         continue;
                     }
 
@@ -160,7 +169,7 @@ public class CommandProcessor {
                     m = createMeasure.matcher(trimmedCommand);
                     if (m.matches()) {
                         List<String> result = service.createMeasure("1", m.group(1), m.group(2));
-                        System.out.println(result.stream().collect(Collectors.joining("\n")));
+                        if (!silentMode) System.out.println(result.stream().collect(Collectors.joining("\n")));
                         continue;
                     }
 
@@ -169,7 +178,7 @@ public class CommandProcessor {
                     m = defineHouse.matcher(trimmedCommand);
                     if (m.matches()) {
                         List<String> result = service.createHouse("1", m.group(1), m.group(2), m.group(3));
-                        System.out.println(result.stream().collect(Collectors.joining("\n")));
+                        if (!silentMode) System.out.println(result.stream().collect(Collectors.joining("\n")));
                         continue;
                     }
 
@@ -178,7 +187,7 @@ public class CommandProcessor {
                     m = defineRoom.matcher(trimmedCommand);
                     if (m.matches()) {
                         List<String> result = service.createRoom("1", m.group(2), m.group(1), m.group(3), m.group(4));
-                        System.out.println(result.stream().collect(Collectors.joining("\n")));
+                        if (!silentMode) System.out.println(result.stream().collect(Collectors.joining("\n")));
                         continue;
                     }
 
@@ -187,7 +196,7 @@ public class CommandProcessor {
                     m = defineSensor.matcher(trimmedCommand);
                     if (m.matches()) {
                         List<String> result = service.createDevice("1", m.group(3), m.group(1), m.group(2));
-                        System.out.println(result.stream().collect(Collectors.joining("\n")));
+                        if (!silentMode) System.out.println(result.stream().collect(Collectors.joining("\n")));
                         continue;
                     }
 
@@ -196,7 +205,7 @@ public class CommandProcessor {
                     m = defineAppliance.matcher(trimmedCommand);
                     if (m.matches()) {
                         List<String> result = service.createDevice("1", m.group(3), m.group(1), m.group(2));
-                        System.out.println(result.stream().collect(Collectors.joining("\n")));
+                        if (!silentMode) System.out.println(result.stream().collect(Collectors.joining("\n")));
                         continue;
                     }
 
@@ -205,7 +214,7 @@ public class CommandProcessor {
                     m = addFeature.matcher(trimmedCommand);
                     if (m.matches()) {
                         List<String> result = service.addFeature("1", m.group(2), m.group(1));
-                        System.out.println(result.stream().collect(Collectors.joining("\n")));
+                        if (!silentMode) System.out.println(result.stream().collect(Collectors.joining("\n")));
                         continue;
                     }
 
@@ -214,7 +223,7 @@ public class CommandProcessor {
                     m = defineOccupant.matcher(trimmedCommand);
                     if (m.matches()) {
                         List<String> result = service.createOccupant("1", m.group(1), m.group(2), m.group(3));
-                        System.out.println(result.stream().collect(Collectors.joining("\n")));
+                        if (!silentMode) System.out.println(result.stream().collect(Collectors.joining("\n")));
                         continue;
                     }
 
@@ -223,7 +232,7 @@ public class CommandProcessor {
                     m = addOccupantToHouse.matcher(trimmedCommand);
                     if (m.matches()) {
                         List<String> result = service.addOccupantToHouse("1", m.group(1), m.group(2));
-                        System.out.println(result.stream().collect(Collectors.joining("\n")));
+                        if (!silentMode) System.out.println(result.stream().collect(Collectors.joining("\n")));
                         continue;
                     }
 
@@ -241,7 +250,7 @@ public class CommandProcessor {
                     m = setDeviceValue.matcher(trimmedCommand);
                     if (m.matches()) {
                         List<String> result = service.updateFeature("1", m.group(2), m.group(3), m.group(4));
-                        System.out.println(result.stream().collect(Collectors.joining("\n")));
+                        if (!silentMode) System.out.println(result.stream().collect(Collectors.joining("\n")));
                         continue;
                     }
 
@@ -250,7 +259,7 @@ public class CommandProcessor {
                     m = getDeviceValue.matcher(trimmedCommand);
                     if (m.matches()) {
                         List<String> result = service.getFeature("1", m.group(2), m.group(3));
-                        System.out.println(result.stream().collect(Collectors.joining("\n")));
+                        if (!silentMode) System.out.println(result.stream().collect(Collectors.joining("\n")));
                         continue;
                     }
 
@@ -259,7 +268,7 @@ public class CommandProcessor {
                     m = getDevice.matcher(trimmedCommand);
                     if (m.matches()) {
                         List<String> result = service.getDevice("1", m.group(2));
-                        System.out.println(result.stream().collect(Collectors.joining("\n")));
+                        if (!silentMode) System.out.println(result.stream().collect(Collectors.joining("\n")));
                         continue;
                     }
 
@@ -268,7 +277,7 @@ public class CommandProcessor {
                     m = getHouse.matcher(trimmedCommand);
                     if (m.matches()) {
                         List<String> result = service.getHouse("1", m.group(1));
-                        System.out.println(result.stream().collect(Collectors.joining("\n")));
+                        if (!silentMode) System.out.println(result.stream().collect(Collectors.joining("\n")));
                         continue;
                     }
 
@@ -277,7 +286,7 @@ public class CommandProcessor {
                     m = getRoom.matcher(trimmedCommand);
                     if (m.matches()) {
                         List<String> result = service.getRoom("1", m.group(1));
-                        System.out.println(result.stream().collect(Collectors.joining("\n")));
+                        if (!silentMode) System.out.println(result.stream().collect(Collectors.joining("\n")));
                         continue;
                     }
 
@@ -286,7 +295,7 @@ public class CommandProcessor {
                     m = getOccupant.matcher(trimmedCommand);
                     if (m.matches()) {
                         List<String> result = service.getOccupant("1", m.group(1));
-                        System.out.println(result.stream().collect(Collectors.joining("\n")));
+                        if (!silentMode) System.out.println(result.stream().collect(Collectors.joining("\n")));
                         continue;
                     }
 
@@ -296,7 +305,7 @@ public class CommandProcessor {
                     m = getAll.matcher(trimmedCommand);
                     if (m.matches()) {
                         List<String> result = service.getAll("1");
-                        System.out.println(result.stream().collect(Collectors.joining("\n")));
+                        if (!silentMode) System.out.println(result.stream().collect(Collectors.joining("\n")));
                         continue;
                     }
 
@@ -307,7 +316,7 @@ public class CommandProcessor {
                     if (m.matches()) {
                         Rule targetRule = controllerService.getRule("1", m.group(2));
                         service.subscribeToFeature("1", m.group(1), targetRule);
-                        System.out.println("Rule '" + targetRule.getName() + "' subscribed to feature: '" + m.group(1));
+                        if (!silentMode) System.out.println("Rule '" + targetRule.getName() + "' subscribed to feature: '" + m.group(1));
                         continue;
                     }
 
@@ -317,7 +326,7 @@ public class CommandProcessor {
                     if (m.matches()) {
                         Rule targetRule = controllerService.getRule("1", m.group(2));
                         service.unsubscribeFromFeature("1", m.group(1), targetRule);
-                        System.out.println("Rule '" + targetRule.getName() + "' unsubscribed from feature: '" + m.group(1));
+                        if (!silentMode) System.out.println("Rule '" + targetRule.getName() + "' unsubscribed from feature: '" + m.group(1));
                         continue;
                     }
 
@@ -327,7 +336,7 @@ public class CommandProcessor {
                     m = createRule.matcher(trimmedCommand);
                     if (m.matches()) {
                         Rule result = controllerService.createRule("1", m.group(1));
-                        System.out.println("Created rule: " + m.group(1));
+                        if (!silentMode) System.out.println("Created rule: " + m.group(1));
                         continue;
                     }
 
@@ -336,7 +345,7 @@ public class CommandProcessor {
                     m = createCommand.matcher(trimmedCommand);
                     if (m.matches()) {
                         Command result = controllerService.createCommand("1", m.group(1), m.group(2), ConfigItemCommandType.FEATURE_UPDATE_COMMAND);
-                        System.out.println("Created command: " + m.group(1));
+                        if (!silentMode) System.out.println("Created command: " + m.group(1));
                         continue;
                     }
 
@@ -346,7 +355,7 @@ public class CommandProcessor {
                     m = createMoveCommand.matcher(trimmedCommand);
                     if (m.matches()) {
                         Command result = controllerService.createCommand("1", m.group(1), m.group(2), ConfigItemCommandType.MOVE_OCCUPANT_COMMAND);
-                        System.out.println("Created command: " + m.group(1));
+                        if (!silentMode) System.out.println("Created command: " + m.group(1));
                         continue;
                     }
 
@@ -355,7 +364,7 @@ public class CommandProcessor {
                     m = createOccupantActivityCommand.matcher(trimmedCommand);
                     if (m.matches()) {
                         Command result = controllerService.createCommand("1", m.group(1), m.group(2), ConfigItemCommandType.SET_OCCUPANT_ACTIVITY_COMMAND);
-                        System.out.println("Created command: " + m.group(1));
+                        if (!silentMode) System.out.println("Created command: " + m.group(1));
                         continue;
                     }
 
@@ -365,7 +374,7 @@ public class CommandProcessor {
                     m = createPredicate.matcher(trimmedCommand);
                     if (m.matches()) {
                         Predicate result = controllerService.createPredicate("1", m.group(1), m.group(2));
-                        System.out.println("Created predicate: " + m.group(1));
+                        if (!silentMode) System.out.println("Created predicate: " + m.group(1));
                         continue;
                     }
 
@@ -397,7 +406,7 @@ public class CommandProcessor {
                                 break;
                         }
                         Context result = controllerService.createContext("1", m.group(1), ciType, m.group(3));
-                        System.out.println("Created context: " + m.group(1));
+                        if (!silentMode) System.out.println("Created context: " + m.group(1));
                         continue;
                     }
 
@@ -407,7 +416,7 @@ public class CommandProcessor {
                     m = getRuleNames.matcher(trimmedCommand);
                     if (m.matches()) {
                         Set<String> result = controllerService.getRuleNames("1");
-                        System.out.println(result.stream().collect(Collectors.joining("\n")));
+                        if (!silentMode) System.out.println(result.stream().collect(Collectors.joining("\n")));
                         continue;
                     }
 
@@ -417,7 +426,7 @@ public class CommandProcessor {
                     m = getPredicateNames.matcher(trimmedCommand);
                     if (m.matches()) {
                         Set<String> result = controllerService.getPredicateNames("1");
-                        System.out.println(result.stream().collect(Collectors.joining("\n")));
+                        if (!silentMode) System.out.println(result.stream().collect(Collectors.joining("\n")));
                         continue;
                     }
 
@@ -426,7 +435,7 @@ public class CommandProcessor {
                     m = getCommandNames.matcher(trimmedCommand);
                     if (m.matches()) {
                         Set<String> result = controllerService.getCommandNames("1");
-                        System.out.println(result.stream().collect(Collectors.joining("\n")));
+                        if (!silentMode) System.out.println(result.stream().collect(Collectors.joining("\n")));
                         continue;
                     }
 
@@ -445,7 +454,7 @@ public class CommandProcessor {
                     m = addCommandToRule.matcher(trimmedCommand);
                     if (m.matches()) {
                         controllerService.addCommandToRule("1", m.group(1), m.group(2));
-                        System.out.println("Added command: '" + m.group(1) + "' to rule: '" + m.group(2) + "'");
+                        if (!silentMode) System.out.println("Added command: '" + m.group(1) + "' to rule: '" + m.group(2) + "'");
                         continue;
                     }
 
@@ -454,7 +463,7 @@ public class CommandProcessor {
                     m = addPredicateToRule.matcher(trimmedCommand);
                     if (m.matches()) {
                         controllerService.addPredicateToRule("1", m.group(1), m.group(2));
-                        System.out.println("Added predicate: '" + m.group(1) + "' to rule: '" + m.group(2) + "'");
+                        if (!silentMode) System.out.println("Added predicate: '" + m.group(1) + "' to rule: '" + m.group(2) + "'");
                         continue;
                     }
 
@@ -464,7 +473,7 @@ public class CommandProcessor {
                     m = addContextToRule.matcher(trimmedCommand);
                     if (m.matches()) {
                         controllerService.addContextToRule("1", m.group(1), m.group(2));
-                        System.out.println("Added context: '" + m.group(1) + "' to rule: '" + m.group(2) + "'");
+                        if (!silentMode) System.out.println("Added context: '" + m.group(1) + "' to rule: '" + m.group(2) + "'");
                         continue;
                     }
 
@@ -473,7 +482,7 @@ public class CommandProcessor {
                     m = removeCommandFromRule.matcher(trimmedCommand);
                     if (m.matches()) {
                         controllerService.removeCommandFromRule("1", m.group(1), m.group(2));
-                        System.out.println("Removed command: '" + m.group(1) + "' to rule: '" + m.group(2) + "'");
+                        if (!silentMode) System.out.println("Removed command: '" + m.group(1) + "' to rule: '" + m.group(2) + "'");
                         continue;
                     }
 
@@ -482,7 +491,7 @@ public class CommandProcessor {
                     m = removePredicateFromRule.matcher(trimmedCommand);
                     if (m.matches()) {
                         controllerService.removePredicateFromRule("1", m.group(1), m.group(2));
-                        System.out.println("Removed predicate: '" + m.group(1) + "' to rule: '" + m.group(2) + "'");
+                        if (!silentMode) System.out.println("Removed predicate: '" + m.group(1) + "' to rule: '" + m.group(2) + "'");
                         continue;
                     }
 
@@ -491,8 +500,7 @@ public class CommandProcessor {
                     m = removeContextFromRule.matcher(trimmedCommand);
                     if (m.matches()) {
                         controllerService.removeContextFromRule("1", m.group(1), m.group(2));
-                        System.out.println("Removed context: '" + m.group(1) + "' to rule: '" + m.group(2) + "'");
-                        continue;
+                        if (!silentMode) System.out.println("Removed context: '" + m.group(1) + "' to rule: '" + m.group(2) + "'");
                     }
 
 

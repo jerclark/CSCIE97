@@ -1,135 +1,138 @@
 console CONTROLLER MAIN TESTS
 
 console ***********************
+console ***********************
 console MODEL SETUP
+console ***********************
 console ***********************
 
 console CREATE HOUSE AND LIVING ROOM
-define house House1 address 115_Hamlet_St floors 2
-define room LivingRoom house House1 floor 1 window_count 1
-define room Kitchen house House1 floor 1 window_count 2
+define house House1 address 115_Hamlet_St floors 2 silent
+define room LivingRoom house House1 floor 1 window_count 1 silent
+define room Kitchen house House1 floor 1 window_count 2 silent
 
 console CREATE OCCUPANT
-define occupant JeremyClark name JeremyClark type Adult
-add occupant JeremyClark house House1
+define occupant JeremyClark name JeremyClark type Adult silent
+add occupant JeremyClark house House1 silent
 
 console CONFIGURE THERMOSTAT
-define appliance Thermostat type thermostat room House1:LivingRoom
-define measure room_temp type Float
-define setting target_temp type Float
-add feature Measure:room_temp device House1:LivingRoom:Thermostat
-add feature Setting:target_temp device House1:LivingRoom:Thermostat
-set appliance House1:LivingRoom:Thermostat status Measure:room_temp value 60
-set appliance House1:LivingRoom:Thermostat status Setting:target_temp value 60
+define appliance Thermostat type thermostat room House1:LivingRoom silent
+define measure room_temp type Float silent
+define setting target_temp type Float silent
+add feature Measure:room_temp device House1:LivingRoom:Thermostat silent
+add feature Setting:target_temp device House1:LivingRoom:Thermostat silent
+set appliance House1:LivingRoom:Thermostat status Measure:room_temp value 60 silent
+set appliance House1:LivingRoom:Thermostat status Setting:target_temp value 60 silent
 
 console CONFIGURE LIVING ROOM AVA
-define appliance Ava type smartspeaker room House1:LivingRoom
-define measure voice_command type String
-define setting text_to_speech type String
-add feature Measure:voice_command device House1:LivingRoom:Ava
-add feature Setting:text_to_speech device House1:LivingRoom:Ava
-
+define appliance Ava type smartspeaker room House1:LivingRoom silent
+define measure voice_command type String silent
+define setting text_to_speech type String silent
+add feature Measure:voice_command device House1:LivingRoom:Ava silent
+add feature Setting:text_to_speech device House1:LivingRoom:Ava silent
 
 console CONFIGURE LIVING ROOM CAMERA
-define appliance Camera type camera room House1:LivingRoom
-define measure occupant_leaving type String
-define measure occupant_arriving type String
-define measure occupant_count type Integer
-define measure occupant_inactive type String
-define measure occupant_active type String
-add feature Measure:occupant_leaving device House1:LivingRoom:Camera
-add feature Measure:occupant_arriving device House1:LivingRoom:Camera
-add feature Measure:occupant_count device House1:LivingRoom:Camera
-add feature Measure:occupant_inactive device House1:LivingRoom:Camera
-add feature Measure:occupant_active device House1:LivingRoom:Camera
-set appliance House1:LivingRoom:Camera status Measure:occupant_count value 1
+define appliance Camera type camera room House1:LivingRoom silent
+define measure occupant_leaving type String silent
+define measure occupant_arriving type String silent
+define measure occupant_count type Integer silent
+define measure occupant_inactive type String silent
+define measure occupant_active type String silent
+add feature Measure:occupant_leaving device House1:LivingRoom:Camera silent
+add feature Measure:occupant_arriving device House1:LivingRoom:Camera silent
+add feature Measure:occupant_count device House1:LivingRoom:Camera silent
+add feature Measure:occupant_inactive device House1:LivingRoom:Camera silent
+add feature Measure:occupant_active device House1:LivingRoom:Camera silent
+set appliance House1:LivingRoom:Camera status Measure:occupant_count value 1 silent
 
 console CONFIGURE SMOKE DETECTOR
-define sensor SmokeDetector type smokedetector room House1:LivingRoom
-define measure smoke_level type Float
-add feature Measure:smoke_level device House1:LivingRoom:SmokeDetector
-set appliance House1:LivingRoom:SmokeDetector status Measure:smoke_level value 0
+define sensor SmokeDetector type smokedetector room House1:LivingRoom silent
+define measure smoke_level type Float silent
+add feature Measure:smoke_level device House1:LivingRoom:SmokeDetector silent
+set appliance House1:LivingRoom:SmokeDetector status Measure:smoke_level value 0 silent
 
 console CONFIGURE EMERGENCY PHONE
-define appliance EmergencyPhone type phone room House1:LivingRoom
-define setting target_number type Integer
-define setting call_mode type HANGUP|CALL
-add feature Setting:target_number device House1:LivingRoom:EmergencyPhone
-add feature Setting:call_mode device House1:LivingRoom:EmergencyPhone
-set appliance House1:LivingRoom:EmergencyPhone status Setting:target_number value 911
-set appliance House1:LivingRoom:EmergencyPhone status Setting:call_mode value HANGUP
+define appliance EmergencyPhone type phone room House1:LivingRoom silent
+define setting target_number type Integer silent
+define setting call_mode type HANGUP|CALL silent
+add feature Setting:target_number device House1:LivingRoom:EmergencyPhone silent
+add feature Setting:call_mode device House1:LivingRoom:EmergencyPhone silent
+set appliance House1:LivingRoom:EmergencyPhone status Setting:target_number value 911 silent
+set appliance House1:LivingRoom:EmergencyPhone status Setting:call_mode value HANGUP silent
 
 console CONFIGURE SMART DOOR
-define appliance Door type door room House1:LivingRoom
-define setting door_state type OPEN|CLOSED
-add feature Setting:door_state device House1:LivingRoom:Door
-set appliance House1:LivingRoom:Door status Setting:door_state value CLOSED
+define appliance Door type door room House1:LivingRoom silent
+define setting door_state type OPEN|CLOSED silent
+add feature Setting:door_state device House1:LivingRoom:Door silent
+set appliance House1:LivingRoom:Door status Setting:door_state value CLOSED silent
 
 console CONFIGURE LIVING ROOM LIGHTS
-define appliance MainLights type lights room House1:LivingRoom
-define appliance Sconces type lights room House1:LivingRoom
-define setting Light_Power type ON|OFF
-define setting Lumens type Integer
-add feature Setting:Light_Power device House1:LivingRoom:MainLights
-add feature Setting:Light_Power device House1:LivingRoom:Sconces
-add feature Setting:Lumens device House1:LivingRoom:MainLights
-add feature Setting:Lumens device House1:LivingRoom:Sconces
+define appliance MainLights type lights room House1:LivingRoom silent
+define appliance Sconces type lights room House1:LivingRoom silent
+define setting Light_Power type ON|OFF silent
+define setting Lumens type Integer silent
+add feature Setting:Light_Power device House1:LivingRoom:MainLights silent
+add feature Setting:Light_Power device House1:LivingRoom:Sconces silent
+add feature Setting:Lumens device House1:LivingRoom:MainLights silent
+add feature Setting:Lumens device House1:LivingRoom:Sconces silent
 console INIT LIGHTS TO OFF
-set appliance House1:LivingRoom:MainLights status Setting:Light_Power value OFF
-set appliance House1:LivingRoom:Sconces status Setting:Light_Power value OFF
+set appliance House1:LivingRoom:MainLights status Setting:Light_Power value OFF silent
+set appliance House1:LivingRoom:Sconces status Setting:Light_Power value OFF silent
 console INIT LIGHTS TO 400 LUMENS (WILL HAVE NO EFFECT SINCE LIGHTS ARE OFF)
-set appliance House1:LivingRoom:MainLights status Setting:Lumens value 400
-set appliance House1:LivingRoom:Sconces status Setting:Lumens value 400
+set appliance House1:LivingRoom:MainLights status Setting:Lumens value 400 silent
+set appliance House1:LivingRoom:Sconces status Setting:Lumens value 400 silent
 
 console CONFIGURE LIVING ROOM WINDOWS
-define appliance FrontWindow type window room House1:LivingRoom
-define appliance SideWindow type window room House1:LivingRoom
-define appliance RearWindow type window room House1:LivingRoom
-define setting Window_Position type OPEN|CLOSED|HALF
-add feature Setting:Window_Position device House1:LivingRoom:FrontWindow
-add feature Setting:Window_Position device House1:LivingRoom:SideWindow
-add feature Setting:Window_Position device House1:LivingRoom:RearWindow
+define appliance FrontWindow type window room House1:LivingRoom silent
+define appliance SideWindow type window room House1:LivingRoom silent
+define appliance RearWindow type window room House1:LivingRoom silent
+define setting Window_Position type OPEN|CLOSED|HALF silent
+add feature Setting:Window_Position device House1:LivingRoom:FrontWindow silent
+add feature Setting:Window_Position device House1:LivingRoom:SideWindow silent
+add feature Setting:Window_Position device House1:LivingRoom:RearWindow silent
 console INIT WINDOW_POSITION TO CLOSED
-set appliance House1:LivingRoom:FrontWindow status Setting:Window_Position value CLOSED
-set appliance House1:LivingRoom:SideWindow status Setting:Window_Position value CLOSED
-set appliance House1:LivingRoom:RearWindow status Setting:Window_Position value CLOSED
+set appliance House1:LivingRoom:FrontWindow status Setting:Window_Position value CLOSED silent
+set appliance House1:LivingRoom:SideWindow status Setting:Window_Position value CLOSED silent
+set appliance House1:LivingRoom:RearWindow status Setting:Window_Position value CLOSED silent
 
 configure OVEN AND KITCHEN AVA
-define appliance AvaKitchen type smartspeaker room House1:Kitchen
-add feature Measure:voice_command device House1:Kitchen:AvaKitchen
-add feature Setting:text_to_speech device House1:Kitchen:AvaKitchen
-define appliance Oven type oven room House1:Kitchen
-define setting timer_mode type START|STOP
-define setting timer_start_value type Integer
-define measure timer_value type Integer
-define measure current_temp type Integer
-add feature Setting:timer_mode device House1:Kitchen:Oven
-add feature Setting:timer_start_value device House1:Kitchen:Oven
-add feature Measure:timer_value device House1:Kitchen:Oven
-add feature Setting:target_temp device House1:Kitchen:Oven
-add feature Measure:current_temp device House1:Kitchen:Oven
-set appliance House1:Kitchen:Oven status Setting:timer_mode value START
-set appliance House1:Kitchen:Oven status Setting:timer_start_value value 120
-set appliance House1:Kitchen:Oven status Measure:timer_value value 10
-set appliance House1:Kitchen:Oven status Setting:target_temp value 350
-set appliance House1:Kitchen:Oven status Measure:current_temp value 350
+define appliance AvaKitchen type smartspeaker room House1:Kitchen silent
+add feature Measure:voice_command device House1:Kitchen:AvaKitchen silent
+add feature Setting:text_to_speech device House1:Kitchen:AvaKitchen silent
+define appliance Oven type oven room House1:Kitchen silent
+define setting timer_mode type START|STOP silent
+define setting timer_start_value type Integer silent
+define measure timer_value type Integer silent
+define measure current_temp type Integer silent
+add feature Setting:timer_mode device House1:Kitchen:Oven silent
+add feature Setting:timer_start_value device House1:Kitchen:Oven silent
+add feature Measure:timer_value device House1:Kitchen:Oven silent
+add feature Setting:target_temp device House1:Kitchen:Oven silent
+add feature Measure:current_temp device House1:Kitchen:Oven silent
+set appliance House1:Kitchen:Oven status Setting:timer_mode value START silent
+set appliance House1:Kitchen:Oven status Setting:timer_start_value value 120 silent
+set appliance House1:Kitchen:Oven status Measure:timer_value value 10 silent
+set appliance House1:Kitchen:Oven status Setting:target_temp value 350 silent
+set appliance House1:Kitchen:Oven status Measure:current_temp value 350 silent
 
 configure REFIGERATOR
-define appliance Refrigerator type Refrigerator room House1:Kitchen
-define measure beer_count type Integer
-define setting beer_count_reminder type Integer
-define setting need_beer type YES|NO
-add feature Measure:beer_count device House1:Kitchen:Refrigerator
-add feature Setting:beer_count_reminder device House1:Kitchen:Refrigerator
-add feature Setting:need_beer device House1:Kitchen:Refrigerator
-set appliance House1:Kitchen:Refrigerator status Measure:beer_count value 10
-set appliance House1:Kitchen:Refrigerator status Setting:beer_count_reminder value 3
-set appliance House1:Kitchen:Refrigerator status Setting:need_beer value NO
+define appliance Refrigerator type Refrigerator room House1:Kitchen silent
+define measure beer_count type Integer silent
+define setting beer_count_reminder type Integer silent
+define setting need_beer type YES|NO silent
+add feature Measure:beer_count device House1:Kitchen:Refrigerator silent
+add feature Setting:beer_count_reminder device House1:Kitchen:Refrigerator silent
+add feature Setting:need_beer device House1:Kitchen:Refrigerator silent
+set appliance House1:Kitchen:Refrigerator status Measure:beer_count value 10 silent
+set appliance House1:Kitchen:Refrigerator status Setting:beer_count_reminder value 3 silent
+set appliance House1:Kitchen:Refrigerator status Setting:need_beer value NO silent
 
 
 
 console ***********************
+console ***********************
 console RULES AND COMMANDS
+console ***********************
 console ***********************
 
 console CREATE CONTEXTS
@@ -518,14 +521,14 @@ console INIT STATE
 set appliance House1:LivingRoom:Ava status Setting:text_to_speech value Nothing
 
 console CONFIRM OVEN IS ON (target_temp != 0) NO TEXT TO SPEECH COMMANDS AND
-show appliance House1:Kitchen:Oven
+show appliance House1:Kitchen:Oven status Setting:target_temp
 show appliance House1:LivingRoom:Ava status Setting:text_to_speech
 
 console DETECT OVEN TIMER VALUE TO 0
 set appliance House1:Kitchen:Oven status Measure:timer_value value 0
 
 console CONFIRM OVEN IS OFF (target_temp == 0) AND AVA SENDING VOICE MESSAGE THAT FOOD IS DONE
-show appliance House1:Kitchen:Oven
+show appliance House1:Kitchen:Oven status Setting:target_temp
 show appliance House1:LivingRoom:Ava status Setting:text_to_speech
 
 
@@ -546,13 +549,14 @@ subscribe feature House1:Kitchen:Refrigerator:Measure:beer_count rule BeerSupply
 console SET BEER COUNT TO 3
 set appliance House1:Kitchen:Refrigerator status Measure:beer_count value 3
 
-console CONFIRM VOICE NOTIFICATION
-show appliance House1:Kitchen:Refrigerator
-show appliance House1:Kitchen:AvaKitchen
+console CONFIRM VOICE NOTIFICATION ASKING IF WANT TO ORDER MORE BEER
+show appliance House1:Kitchen:Refrigerator status Measure:beer_count
+show appliance House1:Kitchen:Refrigerator status Setting:need_beer
+show appliance House1:Kitchen:AvaKitchen status Setting:text_to_speech
 
 console ASK FOR MORE BEER
 subscribe feature House1:Kitchen:AvaKitchen:Measure:voice_command rule GenericVoiceCommand
 set appliance House1:Kitchen:AvaKitchen status Measure:voice_command value need_beer_to_YES
 
 console CONFIRM NEED BEER IS NOW YES (which will trigger a beer order from the smart refrigerator)
-show appliance House1:Kitchen:Refrigerator
+show appliance House1:Kitchen:Refrigerator status Setting:need_beer

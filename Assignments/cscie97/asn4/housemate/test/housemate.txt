@@ -1,0 +1,101 @@
+console STANDARD FLOW SCRIPT START
+
+console Adding MEASURES
+define measure surface_temperature type Float
+define measure inside_temperature type Float
+define measure beer_count type Integer
+
+console Adding SETTINGS
+define setting door_lock type Boolean
+define setting ice_style type Crushed|Cubed
+define setting target_temperature type Float
+
+console Adding House
+define house House1 address 115_Hamlet_St floors 2
+
+console Defining Occupant
+define occupant me name Jeremy Clark type Adult
+
+console Adding occupant to house
+add occupant me house House1
+
+console Adding Kitchen
+define room Kitchen house House1 floor 1 window_count 1
+
+console Moving occupant to a room
+move occupant me room House1:Kitchen
+
+console Adding Living Room
+define room LivingRoom house House1 floor 1 window_count 1
+
+console Moving occupant to LIVING ROOM
+move occupant me room House1:LivingRoom
+
+console Setting up REFIGERATOR
+define appliance REFIGERATOR type refigerator room House1:Kitchen
+
+console Adding feature inside_temperature to REFRIGERATOR
+add feature Measure:inside_temperature device House1:Kitchen:REFIGERATOR
+
+console Setting feature inside_temperature to 28.2
+set appliance House1:Kitchen:REFIGERATOR status Measure:inside_temperature value 28.2
+
+console Adding feature beer_count to REFIGERATOR
+add feature Measure:beer_count device House1:Kitchen:REFIGERATOR
+
+console Setting feature beer_count to 12
+set appliance House1:Kitchen:REFIGERATOR status Measure:beer_count value 12
+
+console Adding feature ice_style to REFIGERATOR
+add feature Setting:ice_style device House1:Kitchen:REFIGERATOR
+
+console Setting feature ice_style to Crushed
+set appliance House1:Kitchen:REFIGERATOR status Setting:ice_style value Crushed
+
+console Setting up THERMOMETER
+define sensor THERMOMETER type thermometer room House1:Kitchen
+
+console Adding feature surface_temperature to THERMOMETER
+add feature Measure:surface_temperature device House1:Kitchen:THERMOMETER
+
+console Setting feature surface_temperature to 74.8
+set sensor House1:Kitchen:THERMOMETER status Measure:surface_temperature value 74.8
+
+console Setting up OVEN
+define appliance OVEN type oven room House1:Kitchen
+
+console Adding feature surface_temperature to OVEN
+add feature Measure:surface_temperature device House1:Kitchen:OVEN
+
+console Setting feature surface_temperature to 74.8
+set appliance House1:Kitchen:OVEN status Measure:surface_temperature value 112.8
+
+console Adding feature inside_temperature to OVEN
+add feature Measure:inside_temperature device House1:Kitchen:OVEN
+
+console Setting feature inside_temperature to 322.7
+set appliance House1:Kitchen:OVEN status Measure:inside_temperature value 322.7
+
+console Adding feature door_lock to OVEN
+add feature Setting:door_lock device House1:Kitchen:OVEN
+
+console Setting feature door_lock to 1
+set appliance House1:Kitchen:OVEN status Setting:door_lock value 1
+
+console Adding feature target_temperature to OVEN
+add feature Setting:target_temperature device House1:Kitchen:OVEN
+
+console Setting feature target_temperature to 450.0
+set appliance House1:Kitchen:OVEN status Setting:target_temperature value 450.0
+
+console Showing device OVEN
+show appliance House1:Kitchen:OVEN
+
+console Showing room KITCHEN
+show configuration room House1:Kitchen
+
+console Showing House1
+show configuration house House1
+
+console Showing ALL
+show configuration

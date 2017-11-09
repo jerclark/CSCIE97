@@ -1,0 +1,96 @@
+console THEATER MODE
+
+console ***********************
+console ***********************
+console MODEL SETUP
+console ***********************
+console ***********************
+
+console CREATE HOUSE AND LIVING ROOM
+define house House1 address 115_Hamlet_St floors 2 silent
+define room LivingRoom house House1 floor 1 window_count 1 silent
+define room Kitchen house House1 floor 1 window_count 2 silent
+
+console CREATE OCCUPANT
+define occupant JeremyClark name JeremyClark type Adult silent
+add occupant JeremyClark house House1 silent
+
+console CREATE SMART BLINDS
+define appliance WindowBlinds type shades room House1:LivingRoom silent
+define setting blind_position type UP|DOWN|HALF silent
+add feature Setting:blind_position device House1:LivingRoom:WindowBlinds
+set appliance House1:LivingRoom:WindowBlinds status Setting:blind_position value UP
+
+console CREATE SMART TV
+define appliance TV type tv room House1:LivingRoom silent
+define setting media_source type MOVIE|CABLE|GAME silent
+add feature Setting:media_source device House1:LivingRoom:TV
+set appliance House1:LivingRoom:TV status Setting:media_source value CABLE
+
+console CREATE CAMERA
+define appliance Camera type camera room House1:LivingRoom silent
+define measure all_occupants_inactive type TRUE|FALSE
+add feature Measure:all_occupants_inactive device House1:LivingRoom:Camera
+set appliance House1:LivingRoom:Camera status Measure:all_occupants_inactive value FALSE
+
+console CREATE REUSABLE LIVING ROOM CONTEXT
+create context name LivingRoomContext type room fqn House1:LivingRoom
+
+console CREATE REUSABLE DROP BLINDS COMMAND
+create feature_update_command name DropBlinds instructions var r = {targetDeviceScope:'House1:LivingRoom:WindowBlinds', targetDeviceStateFqn:'Setting:blind_position', targetValue:'DOWN'};r;
+
+
+console ***********************
+console ***********************
+console THEATER MODE RULE SETUP
+console ***********************
+console ***********************
+
+console CREATE AND CONFIGURE THE THEATER MODE RULE
+create rule_predicate name IsTVInMovieMode test (context['House1:LivingRoom:TV:Setting:media_source'].is_set_to == 'MOVIE');
+create rule TheaterMode
+add context LivingRoomContext rule TheaterMode
+add predicate IsTVInMovieMode rule TheaterMode
+add command DropBlinds rule TheaterMode
+
+console BLINDS ARE UP
+show appliance House1:LivingRoom:WindowBlinds status Setting:blind_position
+
+console SUBSCRIBE RULE TO TV SOURCE MODE
+subscribe feature House1:LivingRoom:TV:Setting:media_source rule TheaterMode
+
+console SET THE TV MODE TO MOVIE
+set appliance House1:LivingRoom:TV status Setting:media_source value MOVIE silent
+
+console CONFIRM OVERHEADS ARE OFF NOW, FLOOR LIGHTS ARE ON AND BLINDS ARE DOWN
+show appliance House1:LivingRoom:WindowBlinds status Setting:blind_position
+
+
+console ***********************
+console ***********************
+console ALL OCCUPANTS INACTIVE RULE
+console ***********************
+console ***********************
+
+console CREATE AND CONFIGURE THE ALL OCCUPANTS INACTIVE RULE
+create rule_predicate name AreAllOccupantsInactive test (context['House1:LivingRoom:Camera:Measure:all_occupants_inactive'].is_detecting == 'TRUE');
+create rule AllOccupantsInactive
+add predicate AreAllOccupantsInactive rule AllOccupantsInactive
+
+console REUSE LIVING ROOM CONTEXT AND DROP BLINDS RULE
+add context LivingRoomContext rule AllOccupantsInactive
+add command DropBlinds rule AllOccupantsInactive
+
+console FORCE BLINDS TO UP AND CHECK STATUS
+set appliance House1:LivingRoom:WindowBlinds status Setting:blind_position value UP silent
+show appliance House1:LivingRoom:WindowBlinds status Setting:blind_position
+
+console SUBSCRIBE OCCUPANTS INACTIVE RULE TO CAMERA "ALL_OCCUPANTS_INACTIVE" MEASURE
+subscribe feature House1:LivingRoom:Camera:Measure:all_occupants_inactive rule AllOccupantsInactive
+
+console CAMERA IS MEASURING ALL_OCCUPANTS_INACTIVE
+set appliance House1:LivingRoom:Camera status Measure:all_occupants_inactive value TRUE silent
+
+console CONFIRM BLINDS ARE DOWN AGAIN
+show appliance House1:LivingRoom:WindowBlinds status Setting:blind_position
+

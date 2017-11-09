@@ -12,6 +12,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static cscie97.asn3.housemate.controller.ConfigItemType.*;
 
+
 public class CommandTest {
 
     private final HouseMateModelService hmms = HouseMateModelServiceImpl.getInstance();
@@ -25,6 +26,7 @@ public class CommandTest {
     public void tearDown(){
         TestBootstrapper.tearDown();
     }
+
 
     @Test
     public void testFeatureUpdateCommand(){

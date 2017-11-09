@@ -1,16 +1,20 @@
 package cscie97.asn3.housemate.controller;
 
-import com.sun.deploy.util.StringUtils;
-import com.sun.tools.javac.util.ArrayUtils;
-import cscie97.asn1.knowledge.engine.QueryEngineException;
 import cscie97.asn2.housemate.model.*;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+
+/**
+ * A special Context that reflects the context of a notification object that passed to an Observer (Rule). See more details in the serialze() doc.
+ */
 public class ConfigItemNotificationContext implements Context, ConfigItemContextComponent{
 
+    /**
+     * The notifying object, stored as an HMMS Configuration Item.
+     */
     private ConfigurationItem _notifyingObject;
 
     private HouseMateModelService hmms = HouseMateModelServiceImpl.getInstance();
@@ -19,10 +23,23 @@ public class ConfigItemNotificationContext implements Context, ConfigItemContext
         _notifyingObject = notifyingObject;
     }
 
+    /**
+     * The context ID of the context
+     * @return
+     */
     public String getContextId(){
         return _notifyingObject.getFqn();
     }
 
+
+    /**
+     * Will return a Map<String, Map<String, String>> of context for the FQN of the notifyingObject
+     * Specifically, will return an Structure that looks like:
+     *
+     * {notifyingObject:{fqn:"notifying:object:fqn", roomFqn:"nofitying:object:room:fqn"}}
+     *
+     * @return
+     */
     public Map<String, Map<String, String>> serialize(){
         Map<String,Map<String,String>> result = new HashMap<String,Map<String,String>>();
 
@@ -33,7 +50,7 @@ public class ConfigItemNotificationContext implements Context, ConfigItemContext
         //Get the notifiying object ROOM FQN
         Map<String, String> roomFqnPair = new HashMap<String, String>();
         String[] roomFqnParts = Arrays.copyOfRange(_notifyingObject.getFqn().split(":"), 0, 2);
-        String roomFqn = StringUtils.join(Arrays.asList(roomFqnParts), ":");
+        String roomFqn = String.join(":", Arrays.asList(roomFqnParts));
         fqnPairs.put("roomFqn", roomFqn);
 
         result.put("notifyingObject", fqnPairs);
